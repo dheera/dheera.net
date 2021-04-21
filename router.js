@@ -2,6 +2,7 @@ const log = require('pino')({prettyPrint: true, level: 'debug'});
 const express = require('express');
 const router = express.Router();
 const routerPhotos = require('./router-photos');
+const routerProjects = require('./router-projects');
 const routerRedirects = require('./router-redirects');
 const geoip = require('geoip-lite');
 const path = require('path');
@@ -41,7 +42,7 @@ router.use('/', express.static(path.join(__dirname, 'static'), {maxage: 1}));
 
 router.get('/about', (req, res) => res.render('about.html'));
 router.use('/photos', routerPhotos);
-router.get('/projects', (req, res) => res.render('projects.html'));
+router.get('/projects', routerProjects);
 router.get('/posts', (req, res) => res.render('posts.html'));
 router.get('/contact', (req, res) => res.render('contact.html'));
 router.get('/', (req, res) => res.render('index.html'));
