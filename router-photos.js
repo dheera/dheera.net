@@ -23,7 +23,7 @@ let getAlbums = () => new Promise((resolve, reject) => {
                         albums.push(album);
                     }
                 }
-                    resolve(albums);
+                resolve(albums);
             });
         },
         reason => reject(reason)
@@ -67,7 +67,7 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
 
 let getSignedImageURL = (imageFile, params) => {
     let path = imageFile + "?" + params;
-    let checksum = md5(config_photos.imgixSecureToken + "/" + path);
+    let checksum = md5(config_photos.imgixSecureToken + "/" + path); // imgix uses MD5, not my choice
     let url = "https://" + config_photos.imgixDomain + "/" + path + "&s=" + checksum;
     return url;
 }
