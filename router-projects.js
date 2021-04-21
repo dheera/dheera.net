@@ -57,7 +57,7 @@ router.get('/', (req, res) => {
         projects => res.render("projects/index.html", { projects: projects }),
         reason => {
             log.error(["projects_index", reason]);
-            res.send(500);
+            res.sendStatus(500);
         }
     );
 });
@@ -68,8 +68,8 @@ router.get('/:projectName', (req, res) => {
         project => res.render('projecs/project.html', { project: project }),
         reason => {
             log.error(["projects", reason]);
-            if(reason && reason.code === "NoSuchKey") return res.send(404);
-            res.send(500);
+            if(reason && reason.code === "NoSuchKey") return res.sendStatus(404);
+            res.sendStatus(500);
         },
     );
 });

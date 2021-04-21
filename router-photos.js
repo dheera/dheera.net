@@ -5,6 +5,7 @@ const fs = require('fs');
 const config_photos = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
 const md5 = require('md5');
 
+
 let getAlbums = () => new Promise((resolve, reject) => {
     aws.listObjects({Bucket: config_photos.bucket, Prefix: config_photos.prefix, Delimiter: "/"})
     .then(
@@ -83,7 +84,7 @@ router.get('/', (req, res) => {
         });
     }, reason => {
         log.error(["photo_index", reason]);
-        res.send(500);
+        res.sendStatus(500);
     });
 });
 
@@ -107,13 +108,13 @@ router.get('/:albumName', (req, res) => {
             })
         }, 
         reason => {
-            if(!reason) return res.send(500);
+            if(!reason) return res.sendStatus(500);
             if(reason.code === "NoSuchKey") {
               log.error(["photo_album", reason]);
-              return res.send(404);
+              return res.sendStatus(404);
             }
             log.error(["photo_album", reason]);
-            res.send(500);
+            res.sendStatus(500);
         }
     );
 });

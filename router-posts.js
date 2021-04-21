@@ -57,7 +57,7 @@ router.get('/', (req, res) => {
         posts => res.render("posts/index.html", { posts: posts }),
         reason => {
             log.error(["posts_index", reason]);
-            res.send(500);
+            res.sendStatus(500);
         }
     );
 });
@@ -68,8 +68,8 @@ router.get('/:postName', (req, res) => {
         post => res.render('projecs/post.html', { post: post }),
         reason => {
             log.error(["posts", reason]);
-            if(reason && reason.code === "NoSuchKey") return res.send(404);
-            res.send(500);
+            if(reason && reason.code === "NoSuchKey") return res.sendStatus(404);
+            res.sendStatus(500);
         },
     );
 });
