@@ -19,3 +19,6 @@ npm install
 gpg config.tar.gz.gpg
 tar -zxvf config.tar.gz
 
+sudo cp -rv files/* /
+sudo service nginx restart
+
