@@ -8,6 +8,7 @@ sudo apt install -y \
   python3-pip \
   htop \
   nethogs \
+  redis-server
 
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt-get install -y nodejs

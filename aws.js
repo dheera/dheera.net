@@ -12,6 +12,6 @@ s3 = new AWS.S3({apiVersion: '2006-03-01'});
 module.exports = {
     s3: s3,
     config_aws: config_aws,
-    listObjects: (params) => new Promise((resolve, reject) => aws.s3.listObjects(params, (err, data) => err ? reject(err) : resolve(data))),
-    getObject: (params) => new Promise((resolve, reject) => aws.s3.getObject(params, (err, data) => err ? reject(err) : resolve(data))),
+    listObjects: (params) => new Promise((resolve, reject) => s3.listObjects(params, (err, data) => err ? reject(err) : resolve(data))),
+    getObject: (params) => new Promise((resolve, reject) => s3.getObject(params, (err, data) => err ? reject(err) : resolve(data))),
 };
