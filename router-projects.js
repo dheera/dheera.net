@@ -55,7 +55,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
 router.get('/', (req, res) => {
     getProjects()
     .then(
-        projects => res.render("projects/index.html", { projects: projects })
+        projects => res.render("projects/index.html", { projects: projects }),
         reason => {
             log.error(["projects_index", reason]);
             res.send(500);
