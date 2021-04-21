@@ -10,7 +10,9 @@ let getAlbums = () => new Promise((resolve, reject) => {
     aws.listObjects({Bucket: config_photos.bucket, Prefix: config_photos.prefix, Delimiter: "/"})
     .then(
         result => {
-            let albumNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_photos.prefix, "").replace("/", ""));
+            let albumNames = result.CommonPrefixes
+		.map(item => item.Prefix.replace(config_photos.prefix, "").replace("/", ""))
+		.filter(name => name[0] != "_");
             let albums = [];
             let promises = [];
             for(i in albumNames) {
@@ -77,10 +79,11 @@ router.get('/', (req, res) => {
     getAlbums()
     .then(albums => {
         for(i in albums) {
-            albums[i].thumbnail = getSignedImageURL(albums[i].imageFiles[0], "w=250");
+            albums[i].thumbnail = getSignedImageURL(albums[i].imageFiles[0], "w=250&h=250&fit=crop");
         }
         res.render('photos/index.html', {
             albums: albums,
+            userInfo: req.userInfo,
         });
     }, reason => {
         log.error(["photo_index", reason]);
@@ -96,8 +99,8 @@ router.get('/:albumName', (req, res) => {
             for (i in album.imageFiles) {
                 images.push({
                     path: album.imageFiles[i],
-                    thumbnail: getSignedImageURL(album.imageFiles[i], "w=250"),
-                    src: getSignedImageURL(album.imageFiles[i], "w=3072"),
+                    thumbnail: getSignedImageURL(album.imageFiles[i], "w=250&h=250&fit=crop"),
+                    src: getSignedImageURL(album.imageFiles[i], "w=3072&h=3072&fit=fillmax&mark=/_watermark/512.png&mark-w=320&mark-align=bottom,left&mark-pad=50"),
                 });
             }
             res.render('photos/album.html', {
@@ -105,6 +108,7 @@ router.get('/:albumName', (req, res) => {
                 title: album.title,
                 description: album.description,
                 thumbAspectRatio: album.thumbAspectRatio,
+                userInfo: req.userInfo,
             })
         }, 
         reason => {
