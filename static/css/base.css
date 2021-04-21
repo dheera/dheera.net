@@ -58,6 +58,8 @@ a:visited {
 
 .content {
   padding:20pt;
+  max-width: 1300pt;
+  margin-left:auto;margin-right:auto;
 }
 
 .footer {
@@ -65,3 +67,47 @@ a:visited {
   color:#808080;
   font-size:11pt;
 }
+  
+.photo-grid {
+  margin-left:-20pt;
+  margin-right:-20pt;
+  margin-top:40pt;
+  line-height:0;
+}
+
+.photo-grid img {
+  margin-right: 5pt;
+  margin-bottom: 5pt;
+  height:auto;
+}
+
+@media only screen and (min-width: 1100px) {
+  .photo-grid img {
+    width:calc( 20% - 4pt );
+  }
+
+  .photo-grid a:nth-child(5n) img {
+    margin-right: 0pt;
+  }
+}
+
+@media only screen and (min-width: 900px) and (max-width: 1099px) {
+  .photo-grid img {
+    width:calc( 25% - 4pt );
+  }
+
+  .photo-grid a:nth-child(4n) img {
+    margin-right: 0pt;
+  }
+}
+
+@media only screen and (max-width: 899px) {
+  .photo-grid img {
+    width:calc( 33.333333333333333% - 4pt );
+  }
+
+  .photo-grid a:nth-child(3n) img {
+    margin-right: 0pt;
+  }
+}
+

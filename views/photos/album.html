@@ -6,10 +6,8 @@
 
 <div class="description">{{ description }}</div>
 
-<div class="album">
-  {% for image in images %}
-  <a href="{{image.src}}"><img src="{{image.thumbnail}}"></a>
-  {% endfor %}
+<div class="photo-grid">
+{% for image in images %}<a href="{{image.src}}"><img src="{{image.thumbnail}}"></a>{% endfor %}
 </div>
 
 {% endblock %}
