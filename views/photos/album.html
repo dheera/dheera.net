@@ -1,0 +1,15 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+<h1 class="title">{{ title }}</h1>
+
+<div class="description">{{ description }}</div>
+
+<div class="album">
+  {% for image in images %}
+  <a href="https://{{imgixDomain}}/{{image}}?w=3072"><img src="https://{{imgixDomain}}/{{image}}?w=250"></a>
+  {% endfor %}
+</div>
+
+{% endblock %}
