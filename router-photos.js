@@ -99,8 +99,8 @@ router.get('/:albumName', (req, res) => {
             for (i in album.imageFiles) {
                 images.push({
                     path: album.imageFiles[i],
-                    thumbnail: getSignedImageURL(album.imageFiles[i], "w=250&h=250&fit=crop"),
-                    src: getSignedImageURL(album.imageFiles[i], "w=3072&h=3072&fit=fillmax&mark=/_watermark/512.png&mark-w=320&mark-align=bottom,left&mark-pad=50"),
+                    thumbnail: getSignedImageURL(album.imageFiles[i], "w=250&h=" + Math.floor(album.thumbAspectRatio * 250) + "&fit=crop"),
+                    src: album.noWatermark ? getSignedImageURL(album.imageFiles[i], "w=3072&h=3072&fit=fillmax") : getSignedImageURL(album.imageFiles[i], "w=3072&h=3072&fit=fillmax&mark=/_watermark/512.png&mark-w=320&mark-align=bottom,left&mark-pad=50"),
                 });
             }
             res.render('photos/album.html', {
