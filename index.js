@@ -6,16 +6,14 @@ const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('./router');
 
 var app = express();
+var http = require('http').Server(app);
 
 nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
 
-
 app.use('/', router);
-
-var http = require('http').Server(app);
 
 http.listen(3000, () => {
   log.info(['http_server', 'listening on *:3000']);

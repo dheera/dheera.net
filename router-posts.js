@@ -2,14 +2,14 @@ const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('express').Router();
 const aws = require('./aws');
 const fs = require('fs');
-const config_projects = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
+const config_posts = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
 const md5 = require('md5');
 
-let getProjects = () => new Promise((resolve, reject) => {
-    aws.listObjects({Bucket: config_projects.bucket, Prefix: config_projects.prefix, Delimiter: "/"})
+let getPosts = () => new Promise((resolve, reject) => {
+    aws.listObjects({Bucket: config_posts.bucket, Prefix: config_posts.prefix, Delimiter: "/"})
     .then(
         result => {
-             let albumNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_projects.prefix, "").replace("/", ""));
+             let albumNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_posts.prefix, "").replace("/", ""));
              let albums = [];
              let promises = [];
              for(i in albumNames) {
@@ -30,8 +30,8 @@ let getProjects = () => new Promise((resolve, reject) => {
     );
 });
 
-let getProject = (projectName) => new Promise((resolve, reject) => {
-    aws.getObject({Bucket: config_projects.bucket, Key: config_projects.prefix + projectName + "/index.html"})
+let getPost = (postName) => new Promise((resolve, reject) => {
+    aws.getObject({Bucket: config_posts.bucket, Key: config_posts.prefix + postName + "/index.html"})
     .then(
         data => {
             let index = {};
@@ -39,7 +39,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
             try {
                 index = JSON.parse(body.match(/<!--(.*?)-->/)[1]);
             } catch(e) {
-                log.error(["getProject", e]);
+                log.error(["getPost", e]);
                 index = {};
             }
             resolve({
@@ -52,22 +52,22 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
 });
 
 router.get('/', (req, res) => {
-    getProjects()
+    getPosts()
     .then(
-        projects => res.render("projects/index.html", { projects: projects }),
+        posts => res.render("posts/index.html", { posts: posts }),
         reason => {
-            log.error(["projects_index", reason]);
+            log.error(["posts_index", reason]);
             res.send(500);
         }
     );
 });
 
-router.get('/:projectName', (req, res) => {
-    getProject(req.params["projectName"])
+router.get('/:postName', (req, res) => {
+    getPost(req.params["postName"])
     .then(
-        project => res.render('projecs/project.html', { project: project }),
+        post => res.render('projecs/post.html', { post: post }),
         reason => {
-            log.error(["projects", reason]);
+            log.error(["posts", reason]);
             if(reason && reason.code === "NoSuchKey") return res.send(404);
             res.send(500);
         },

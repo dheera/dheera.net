@@ -1,6 +1,5 @@
 const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('express').Router();
-const photos = require('./photos');
 const aws = require('./aws');
 const fs = require('fs');
 const config_photos = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
@@ -66,14 +65,18 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
     );
 });
 
+let getSignedImageURL = (imageFile, params) => {
+    let path = imageFile + "?" + params;
+    let checksum = md5(config_photos.imgixSecureToken + "/" + path);
+    let url = "https://" + config_photos.imgixDomain + "/" + path + "&s=" + checksum;
+    return url;
+}
+
 router.get('/', (req, res) => {
     getAlbums()
     .then(albums => {
         for(i in albums) {
-            thumbnail = albums[i].imageFiles[0] + "?w=250";
-            checksum = md5(config_photos.imgixSecureToken + "/" + thumbnail);
-            thumbnail = "https://" + config_photos.imgixDomain + "/" + thumbnail + "&s=" + checksum;
-            albums[i].thumbnail = thumbnail;
+            albums[i].thumbnail = getSignedImageURL(albums[i].imageFiles[0], "w=250");
         }
         res.render('photos/index.html', {
             albums: albums,
@@ -90,16 +93,10 @@ router.get('/:albumName', (req, res) => {
         album => {
             images = [];
             for (i in album.imageFiles) {
-                src = album.imageFiles[i] + "?w=3072";
-                checksum = md5(config_photos.imgixSecureToken + "/" + src);
-                src = "https://" + config_photos.imgixDomain + "/" + src + "&s=" + checksum;
-                thumbnail = album.imageFiles[i] + "?w=250";
-                checksum = md5(config_photos.imgixSecureToken + "/" + thumbnail);
-                thumbnail = "https://" + config_photos.imgixDomain + "/" + thumbnail + "&s=" + checksum;
                 images.push({
                     path: album.imageFiles[i],
-                    thumbnail: thumbnail,
-                    src: src,
+                    thumbnail: getSignedImageURL(album.imageFiles[i], "w=250"),
+                    src: getSignedImageURL(album.imageFiles[i], "w=3072"),
                 });
             }
             res.render('photos/album.html', {
