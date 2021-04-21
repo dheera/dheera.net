@@ -8,7 +8,7 @@
 
 <div class="album">
   {% for image in images %}
-  <a href="https://{{imgixDomain}}/{{image}}?w=3072"><img src="https://{{imgixDomain}}/{{image}}?w=250"></a>
+  <a href="{{image.src}}"><img src="{{image.thumbnail}}"></a>
   {% endfor %}
 </div>
 
