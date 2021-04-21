@@ -46,6 +46,9 @@ router.get('/posts', routerPosts);
 router.get('/contact', (req, res) => res.render('contact.html'));
 router.get('/', (req, res) => res.render('index.html'));
 
+router.get('/api/geo', (req, res) => res.json(req.geo));
+router.get('/api/headers', (req, res) => res.json(req.headers));
+
 router.all('*', (req, res) => {
   res.status(404).send({msg: "not found"});
 });
