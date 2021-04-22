@@ -65,29 +65,110 @@ a:visited {
   -webkit-user-select:none;
   -moz-user-select:none;
   user-select:none;
+  -webkit-transition:background-color 0.3s ease;
+  -moz-transition:background-color 0.3s ease;
+  transition:background-color 0.3s ease;
+}
+
+@media only screen and (max-width: 899px) {
+  .navbar {
+    position:static;
+    z-index:0;
+  }
 }
 
 .navbar-logo {
-  width:150px;
-  vertical-align:middle;
+  position:static;
   margin-right:20pt;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  float:left;
+  opacity:0.5;
 }
 
-.navbar-scrolled {
-  background-color:rgba(40, 40, 40, 0.7);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(8px);
+.light .navbar-logo {
+  filter:invert();
+}
+
+.navbar-logo img {
+  width:150px;
+  vertical-align:middle;
+}
+
+.navbar-button-light {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100pt;
+  height:100%;
+  float:right;
+  cursor:pointer;
+  color:#808080;
+}
+
+.navbar-link {
+  text-transform:uppercase;
+  position:static;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:15%;
+  height:100%;
+  vertical-align:middle;
+  line-height:100vh;
+  float:right;
+}
+
+@media only screen and (max-width: 900px) {
+  .navbar-link {
+    width:50pt;
+    /*transform:rotate(-90deg) translateX(-20px) translateY(-40px);
+    justify-content:flex-end;*/
+    writing-mode:vertical-rl;
+  }
+}
+
+.navbar a:link {
+  color:#c0c0c0;
+  text-decoration:none;
+}
+
+.navbar a:visited {
+  color:#c0c0c0;
+  text-decoration:none;
+}
+
+@media only screen and (min-width: 900px) {
+  html:not([data-scroll='0']) .navbar {
+    background-color:rgba(40, 40, 40, 0.7);
+    -webkit-backdrop-filter: blur(20px);
+    -moz-backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
+  }
 }
 
 .light .navbar {
-  background:#e0e0e0;
+  background:#ffffff;
   color:#000000;
 }
 
-.light .navbar-scrolled {
-  background-color:rgba(255, 255, 255, 0.7);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(8px);
+.light .navbar a:link {
+  color:#303030;
+}
+
+.light .navbar a:visited {
+  color:#303030;
+}
+
+@media only screen and (min-width: 900px) {
+  html:not([data-scroll='0']) .light .navbar {
+    background-color:rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(20px);
+    -moz-backdrop-filter: blur(20px);
+    backdrop-filter: blur(8px);
+  }
 }
 
 .page {
