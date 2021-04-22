@@ -5,20 +5,32 @@
 
   <img src="/images/profile-camera.jpg" class="img-float-right" style="width:300pt;height:300pt;">
 
-  <p>Hi, I'm Dheera Venkatraman. I live in the San Francisco Bay Area and do <b>robotics</b>, <b>machine learning</b>, and <b>perception</b>. I co-founded <a href="https://robby.io">Robby Technologies</a>, a Y Combinator-backed company which did 3+ years of robotic deliveries of food, groceries, and packages around the San Francisco Bay Area, and before that, I worked at the <a href="https://www.rle.mit.edu/qoptics/people/">Optical and Quantum Communications Group</a> at MIT. I come from a strong physics background and tend to attack most problems from first principles.</p>
+  <p>Hi, I'm Dheera Venkatraman. I live in the San Francisco Bay Area and do <b>robotics</b>, <b>machine learning</b>, and <b>perception</b>. I currently work at <a href="https://freedomrobotics.ai">Freedom Robotics</a> where we make enterprise robot fleet monitoring solutions. Prior to that I co-founded <a href="https://robby.io">Robby Technologies</a>, a Y Combinator-backed company which did 3+ years of robotic deliveries of food, groceries, and packages around the San Francisco Bay Area. Before that, I completed my Ph.D. at the <a href="https://www.rle.mit.edu/qoptics/people/">Optical and Quantum Communications Group</a> at MIT, where I led the experimental implementation of a <a href="https://science.sciencemag.org/content/343/6166/58">single-photon 3D camera/LIDAR</a>, among other optics work. I come from a strong physics background and tend to attack most problems from first principles, and have lots of side projects in imaging, robotics, and photography. I have strong interests in promoting the use of robotics for greater good, including safety, convenience, and sustainability.</p>
+
+  {% if not userInfo.groups.aa %}
 
   <h2>fun</h2>
 
-  <p>I'm fascinated by the physics of light. Photography is one of my main hobbies. I've done many photography projects, but of late, since I'm in California, I've been seizing the opportunities to get to dark sky sites and image a lot of nebulas and deep sky objects in the context of natural landscapes, and it also allows for hiking as exercise. I also do a lot of other photography.
+  <p>I'm fascinated by the physics of light. Photography is one of my main hobbies. I've done many photography projects, but of late, since I'm in California where dark skies are plentiful, I've been seizing the opportunities to image nebulas and deep sky objects in the context of natural landscapes, and it also allows for hiking as exercise. I also do a lot of other photography.
 
-  <p>In my spare time I also like building robots, hiking, biking, and piano. I also think a lot about solutions to sustainability problems and how we can use technology to face them.</p>
+  <p>In my spare time I also like building robots, hiking, biking, piano, and experimenting with food. I also think a lot about solutions to sustainability problems and how we can use technology to face them.</p>
 
   <h2>design</h2>
 
-  <p>I like to live by design, not by default. If I can't find software that does what I want, I will usually build it. If I can't find a restaurant that serves what I want, I'll make it. But that applies to other things as well, like furniture, lighting, and hopefully many more things to come. One of my dreams is to one day have designed everything I own.</p>
+  <p>I like to live by design, not by default. If I can't find software that does what I want, I will usually build it. If I can't find a restaurant that serves what I want, I'll make it. But that applies to other things as well, like furniture, lighting, and hopefully many more things to come. One of my dreams is to one day have designed everything I own. I realize I may never get there, but I will try.</p>
 
   <h2>where are you from</h2>
 
   <p>Mars. But seriously, please don't ask this question or I will throw an exception. I'm a <a href="https://en.wikipedia.org/wiki/Third_culture_kid">Third-Culture Kid</a>, my culture, nationality, ethnicity, and languages all have basically nothing to do with each other, and the concept of being "from" a specific place is one that I never had.</p>
+
+  <h2>travel</h2>
+
+  If you are wondering parts of the world have influenced me, or are simply looking for travel recommendations or tips, you might want to take a look at the <a href="https://mapsengine.google.com/map/u/0/embed?mid=zrGjShp9ApJA.k821Vd3CtrQw">places I have been</a>.
+
+  <h2>volunteer work</h2>
+
+  I used to volunteer frequently with the <a href="https://www.tzuchi.org.tw/">Tzu Chi Foundation</a>, including a disaster relief trips to Haiti, was on the founding team of the <a href="https://www.mitchief.org/">MIT-China Innovation and Entrepereneurship Forum</a>, and was a Marketing/Technical director of the <a href="http://sustainabilitysummit.mit.edu/">MIT Sustainability Summit</a> for many years. Currently I'm focused on my career and have put volunteer work on hold, but hope to return to it at some point in the future. My thoughts may change at some point, but I would like to think of better ways to use technology to better scale impact for social good, as human volunteer labor can only scale so much.
+
+  {% endif %}
 
 {% endblock %}

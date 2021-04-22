@@ -54,7 +54,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
 router.get('/', (req, res) => {
     getProjects()
     .then(
-        projects => res.render("projects/index.html", { projects: projects }),
+        projects => res.render("projects/index.html", { projects: projects, userInfo : req.userInfo }),
         reason => {
             log.error(["projects_index", reason]);
             res.sendStatus(500);
@@ -65,7 +65,7 @@ router.get('/', (req, res) => {
 router.get('/:projectName', (req, res) => {
     getProject(req.params["projectName"])
     .then(
-        project => res.render('projecs/project.html', { project: project }),
+        project => res.render('projecs/project.html', { project: project, userInfo: req.userInfo }),
         reason => {
             log.error(["projects", reason]);
             if(reason && reason.code === "NoSuchKey") return res.sendStatus(404);

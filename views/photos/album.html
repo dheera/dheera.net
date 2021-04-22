@@ -4,7 +4,7 @@
 
 <h1 class="title">{{ title }}</h1>
 
-<div class="description">{{ description }}</div>
+<div class="description">{{ description|safe }}</div>
 
 <div class="photo-grid">
 {% for image in images %}<a href="{{image.src}}"><img src="{{image.thumbnail}}"></a>{% endfor %}

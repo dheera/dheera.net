@@ -10,8 +10,18 @@ body {
     font-weight:300;
 }
 
+body.light {
+    background:#ffffff;
+    color:#000000;
+}
+
 h1, h2, h3, h4, h5 {
+    color:#ffffff;
     font-weight:300;
+}
+
+.light h1, .light h2, .light h3, .light h4, .light h5 {
+    color:#808080;
 }
 
 h1 {
@@ -28,6 +38,14 @@ a:visited {
   text-decoration:none;
 }
 
+.light a:link {
+  color:#0080cc;
+}
+
+.light a:visited {
+  color:#0080cc;
+}
+
 .img-float-right {
  float:right;
  margin-left:10pt;
@@ -35,18 +53,41 @@ a:visited {
 }
 
 .navbar {
-  background:#434343;
   color:#ffffff;
   position:fixed;
   top:0;
   width:100%;
   height:30pt;
-  line-height:30pt;
+  line-height:0pt;
   vertical-align:middle;
-  padding:10pt;
+  padding:20pt;
+  z-index:1000;
   -webkit-user-select:none;
   -moz-user-select:none;
   user-select:none;
+}
+
+.navbar-logo {
+  width:150px;
+  vertical-align:middle;
+  margin-right:20pt;
+}
+
+.navbar-scrolled {
+  background-color:rgba(40, 40, 40, 0.7);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(8px);
+}
+
+.light .navbar {
+  background:#e0e0e0;
+  color:#000000;
+}
+
+.light .navbar-scrolled {
+  background-color:rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(8px);
 }
 
 .page {
@@ -73,6 +114,9 @@ a:visited {
   margin-right:-20pt;
   margin-top:40pt;
   line-height:0;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .photo-grid img {

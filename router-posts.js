@@ -54,7 +54,7 @@ let getPost = (postName) => new Promise((resolve, reject) => {
 router.get('/', (req, res) => {
     getPosts()
     .then(
-        posts => res.render("posts/index.html", { posts: posts }),
+        posts => res.render("posts/index.html", { posts: posts, userInfo: req.userInfo }),
         reason => {
             log.error(["posts_index", reason]);
             res.sendStatus(500);
@@ -65,7 +65,7 @@ router.get('/', (req, res) => {
 router.get('/:postName', (req, res) => {
     getPost(req.params["postName"])
     .then(
-        post => res.render('projecs/post.html', { post: post }),
+        post => res.render('projecs/post.html', { post: post, userInfo: req.userInfo }),
         reason => {
             log.error(["posts", reason]);
             if(reason && reason.code === "NoSuchKey") return res.sendStatus(404);

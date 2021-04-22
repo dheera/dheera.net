@@ -26,25 +26,27 @@ router.use((req, res, next) => {
     'geo': req.geo,
   }]);
 
-  if(req.geo && req.geo.country && req.geo.region) {
-    req.isH = (req.geo.country === "US" && req.geo.region === "NJ") || (req.geo.country === "IN");
-    req.isC = (req.geo.country === "CN");
-  } else {
-    req.isH = false;
-    req.isC = false;
-  }
 
+  req.userInfo = {"groups": {}};
+
+  if(req.geo && req.geo.country && req.geo.region) {
+    req.userInfo.groups.aa = (req.geo.country === "US" && req.geo.region === "NJ") || (req.geo.country === "IN");
+    req.userInfo.groups.cn = (req.geo.country === "CN");
+  } else {
+    req.userInfo.groups.aa = false;
+    req.userInfo.groups.cn = false;
+  }
   return next();
 });
 
 router.use('/', routerRedirects);
 router.use('/', express.static(path.join(__dirname, 'static'), {maxage: 1}));
-router.get('/about', (req, res) => res.render('about.html'));
+router.get('/about', (req, res) => res.render('about.html', { userInfo: req.userInfo }));
 router.use('/photos', routerPhotos);
 router.get('/projects', routerProjects);
 router.get('/posts', routerPosts);
-router.get('/contact', (req, res) => res.render('contact.html'));
-router.get('/', (req, res) => res.render('index.html'));
+router.get('/contact', (req, res) => res.render('contact.html', { userInfo: req.userInfo }));
+router.get('/', (req, res) => res.render('index.html', { userInfo: req.userInfo }));
 
 router.get('/api/geo', (req, res) => res.json(req.geo));
 router.get('/api/headers', (req, res) => res.json(req.headers));
