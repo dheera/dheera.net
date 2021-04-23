@@ -16,6 +16,8 @@ sudo apt-get install -y nodejs
 rm -rf node_modules
 
 npm install
+
+rm -rf config.tar.gz
 gpg config.tar.gz.gpg
 tar -zxvf config.tar.gz
 
