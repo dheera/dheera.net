@@ -122,4 +122,7 @@ router.get('/:albumName', (req, res) => {
     );
 });
 
+// kick off prefetching
+setInterval(getAlbums, 500);
+
 module.exports = router;
