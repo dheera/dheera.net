@@ -5,9 +5,8 @@ const fs = require('fs');
 const config_photos = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
 const md5 = require('md5');
 
-
 let getAlbums = () => new Promise((resolve, reject) => {
-    aws.listObjects({Bucket: config_photos.bucket, Prefix: config_photos.prefix, Delimiter: "/"})
+    aws.listObjects_cached({Bucket: config_photos.bucket, Prefix: config_photos.prefix, Delimiter: "/"})
     .then(
         result => {
             let albumNames = result.CommonPrefixes
@@ -36,8 +35,8 @@ let getAlbums = () => new Promise((resolve, reject) => {
 let getAlbum = (albumName) => new Promise((resolve, reject) => {
     albumName = albumName.replace(/[^A-Za-z0-9_\- ]/g, ""); // sanitize
     Promise.all([
-        aws.listObjects({Bucket: config_photos.bucket, Prefix: config_photos.prefix + albumName}),
-        aws.getObject({Bucket: config_photos.bucket, Key: config_photos.prefix + albumName + "/index.json"}),
+        aws.listObjects_cached({Bucket: config_photos.bucket, Prefix: config_photos.prefix + albumName}),
+        aws.getObject_cached({Bucket: config_photos.bucket, Key: config_photos.prefix + albumName + "/index.json"}),
     ]).then(
         data => {
             let objectList = data[0].Contents;
