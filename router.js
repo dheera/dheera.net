@@ -52,7 +52,7 @@ router.get('/api/geo', (req, res) => res.json(req.geo));
 router.get('/api/headers', (req, res) => res.json(req.headers));
 
 router.all('*', (req, res) => {
-  res.status(404).send({msg: "not found"});
+  res.sendStatus(404);
 });
 
 module.exports = router;
