@@ -34,6 +34,7 @@ let getAlbums = () => new Promise((resolve, reject) => {
 });
 
 let getAlbum = (albumName) => new Promise((resolve, reject) => {
+    albumName = albumName.replace(/[^A-Za-z0-9_\- ]/g, ""); // sanitize
     Promise.all([
         aws.listObjects({Bucket: config_photos.bucket, Prefix: config_photos.prefix + albumName}),
         aws.getObject({Bucket: config_photos.bucket, Key: config_photos.prefix + albumName + "/index.json"}),
@@ -114,7 +115,6 @@ router.get('/:albumName', (req, res) => {
         reason => {
             if(!reason) return res.sendStatus(500);
             if(reason.code === "NoSuchKey") {
-              log.error(["photo_album", reason]);
               return res.sendStatus(404);
             }
             log.error(["photo_album", reason]);

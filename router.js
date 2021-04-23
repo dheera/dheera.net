@@ -12,20 +12,38 @@ router.use((req, res, next) => {
   req.realIp = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection.remoteAddress;
 
   if(req.realIp === "::1") req.realIp = '107.3.166.67';
-  req.geo = geoip.lookup(req.realIp);
 
-  log.info(['http_log', {
-    'ip': req.realIp,
-    'hostname': req.hostname,
-    'query': req.query,
-    'body': req.body,
-    'path': req.path,
-    'user_agent': req.headers['user-agent'],
-    'accept-language': req.headers['accept-language'],
-    'referer': req.headers['referer'],
-    'geo': req.geo,
-  }]);
+  try {
+    req.geo = geoip.lookup(req.realIp) || {};
+  } catch(e) {
+    log.error(["geoip", e]);
+    req.geo = {};
+  }
 
+  delete(req.geo["range"]);
+  delete(req.geo["eu"]);
+
+  res.on("finish", () => {
+    const log_item = {
+      'status': res.statusCode,
+      'ip': req.realIp,
+      'hostname': req.hostname,
+      'query': req.query,
+      'body': req.body,
+      'path': req.path,
+      'user_agent': req.headers['user-agent'],
+      'accept-language': req.headers['accept-language'],
+      'referer': req.headers['referer'],
+      'geo': req.geo,
+    };
+    if(res.statusCode <= 399) {
+      log.info(["http_log", log_item]);
+    } else if(res.statusCode >= 400 && res.statusCode < 500) {
+      log.warn(["http_log", log_item]);
+    } else {
+      log.error(["http_log", log_item]);
+    }
+  });
 
   req.userInfo = {"groups": {}};
 
