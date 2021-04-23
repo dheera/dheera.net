@@ -58,7 +58,9 @@ router.use((req, res, next) => {
 });
 
 router.use('/', routerRedirects);
-router.use('/', express.static(path.join(__dirname, 'static'), {maxage: 1}));
+router.use('/css', express.static(path.join(__dirname, 'static/css'), {maxAge: 10000}));
+router.use('/js', express.static(path.join(__dirname, 'static/js'), {maxAge: 10000}));
+router.use('/', express.static(path.join(__dirname, 'static'), {maxAge: 3600000}));
 router.get('/about', (req, res) => res.render('about.html', { userInfo: req.userInfo }));
 router.use('/photos', routerPhotos);
 router.get('/projects', routerProjects);
