@@ -1,0 +1,17 @@
+{% extends "../base.html" %}
+
+{% block content %}
+
+<h1 class="title">{{ project.title }}</h1>
+
+{% if project.subtitle %}
+<h2 class="title">{{ project.subtitle }}</h2>
+{% endif %}
+
+<div class="markup-content">
+
+{{ project.body|safe }}
+
+</div>
+
+{% endblock %}

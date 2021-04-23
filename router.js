@@ -63,9 +63,8 @@ router.use('/js', express.static(path.join(__dirname, 'static/js'), {maxAge: 100
 router.use('/', express.static(path.join(__dirname, 'static'), {maxAge: 3600000}));
 router.get('/about', (req, res) => res.render('about.html', { userInfo: req.userInfo }));
 router.use('/photos', routerPhotos);
-router.get('/projects', routerProjects);
-router.get('/posts', routerPosts);
-router.get('/contact', (req, res) => res.render('contact.html', { userInfo: req.userInfo }));
+router.use('/projects', routerProjects);
+router.use('/posts', routerPosts);
 router.get('/', (req, res) => res.render('index.html', { userInfo: req.userInfo }));
 
 router.get('/api/geo', (req, res) => res.json(req.geo));

@@ -2,28 +2,28 @@ const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('express').Router();
 const aws = require('./aws');
 const fs = require('fs');
-const config_projects = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
+const config_projects = JSON.parse(fs.readFileSync('./config/projects.json', 'utf8'));
 const md5 = require('md5');
 
 let getProjects = () => new Promise((resolve, reject) => {
-    aws.listObjects({Bucket: config_projects.bucket, Prefix: config_projects.prefix, Delimiter: "/"})
+    aws.listObjects_cached({Bucket: config_projects.bucket, Prefix: config_projects.prefix, Delimiter: "/"})
     .then(
         result => {
-             let albumNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_projects.prefix, "").replace("/", ""));
-             let albums = [];
+             let projectNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_projects.prefix, "").replace("/", ""));
              let promises = [];
-             for(i in albumNames) {
-                 promises.push(getAlbum(albumNames[i]));
+             for(i in projectNames) {
+                 promises.push(getProject(projectNames[i]));
              }
              Promise.allSettled(promises).then(results => {
+		 let projects = [];
                  for(i in results) {
                      if(results[i].status === "fulfilled") {
-                         album = results[i].value;
-                         album.name = albumNames[i];
-                         albums.push(album);
+                         project = results[i].value;
+                         project.name = projectNames[i];
+                         projects.push(album);
                      }
                  }
-                 resolve(albums);
+                 resolve(projects);
              });
         },
         reason => reject(reason)
@@ -31,19 +31,30 @@ let getProjects = () => new Promise((resolve, reject) => {
 });
 
 let getProject = (projectName) => new Promise((resolve, reject) => {
-    aws.getObject({Bucket: config_projects.bucket, Key: config_projects.prefix + projectName + "/index.html"})
+    aws.getObject_cached({Bucket: config_projects.bucket, Key: config_projects.prefix + projectName + "/index.html"})
     .then(
         data => {
             let index = {};
-            body = data.Body.toString('utf-8');
-            try {
-                index = JSON.parse(body.match(/<!--(.*?)-->/)[1]);
-            } catch(e) {
-                log.error(["getProject", e]);
-                index = {};
+            let body = data.Body.toString('utf-8');
+            let infoMatch = body.match(/<!--(.*?)-->/s);
+	    if(infoMatch) {
+                try {
+                    index = JSON.parse(infoMatch[1]);
+                } catch(e) {
+                    log.error(["getProject", e]);
+                    index = { "title": projectName };
+                }
+            } else {
+                index = { "title": projectName };
             }
+
+            let baseUrl = "https://" + config_projects.domain + "/" + config_projects.prefix + projectName + "/";
+
+            body = body.replace(/src="(.*?)"/g, 'src="' + baseUrl + "$1" + '"');
+
             resolve({
                 title: index.title || "",
+                subtitle: index.subtitle || "",
                 body: body,
             });
         },
@@ -63,9 +74,10 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:projectName', (req, res) => {
+    console.log(req.params);
     getProject(req.params["projectName"])
     .then(
-        project => res.render('projecs/project.html', { project: project, userInfo: req.userInfo }),
+        project => res.render('projects/project.html', { project: project, userInfo: req.userInfo }),
         reason => {
             log.error(["projects", reason]);
             if(reason && reason.code === "NoSuchKey") return res.sendStatus(404);
