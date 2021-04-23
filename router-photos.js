@@ -70,8 +70,8 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
 
 let getSignedImageURL = (imageFile, params) => {
     let path = imageFile + "?" + params;
-    let checksum = md5(config_photos.imgixSecureToken + "/" + path); // imgix uses MD5, not my choice
-    let url = "https://" + config_photos.imgixDomain + "/" + path + "&s=" + checksum;
+    let checksum = md5(config_photos.imgixSecureToken + "/" + config_photos.prefix + path); // imgix uses MD5, not my choice
+    let url = "https://" + config_photos.imgixDomain + "/" + config_photos.prefix + path + "&s=" + checksum;
     return url;
 }
 
@@ -100,7 +100,7 @@ router.get('/:albumName', (req, res) => {
                 images.push({
                     path: album.imageFiles[i],
                     thumbnail: getSignedImageURL(album.imageFiles[i], "w=300&h=" + Math.floor(album.thumbAspectRatio * 300) + "&fit=crop"),
-                    src: album.noWatermark ? getSignedImageURL(album.imageFiles[i], "w=2048&h=2048&fit=fillmax") : getSignedImageURL(album.imageFiles[i], "w=2048&h=2048&fit=fillmax&mark=/_watermark/512.png&mark-w=200&mark-align=bottom,left&mark-pad=50"),
+                    src: album.noWatermark ? getSignedImageURL(album.imageFiles[i], "w=2048&h=2048&fit=fillmax") : getSignedImageURL(album.imageFiles[i], "w=2048&h=2048&fit=fillmax&mark=/photos/_watermark/512.png&mark-w=200&mark-align=bottom,left&mark-pad=50"),
                 });
             }
             res.render('photos/album.html', {
