@@ -1,3 +1,31 @@
+/* saira-semi-condensed-300 - latin */
+@font-face {
+  font-family: 'Saira Semi Condensed';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/saira-semi-condensed-v6-latin-300.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/saira-semi-condensed-v6-latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/saira-semi-condensed-v6-latin-300.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/saira-semi-condensed-v6-latin-300.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/saira-semi-condensed-v6-latin-300.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/saira-semi-condensed-v6-latin-300.svg#SairaSemiCondensed') format('svg'); /* Legacy iOS */
+}
+
+/* saira-semi-condensed-700 - latin */
+@font-face {
+  font-family: 'Saira Semi Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/saira-semi-condensed-v6-latin-700.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/saira-semi-condensed-v6-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/saira-semi-condensed-v6-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/saira-semi-condensed-v6-latin-700.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/saira-semi-condensed-v6-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/saira-semi-condensed-v6-latin-700.svg#SairaSemiCondensed') format('svg'); /* Legacy iOS */
+}
+
 html {
     margin:0;
 }
