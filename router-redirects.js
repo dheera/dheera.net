@@ -1,12 +1,18 @@
 const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('express').Router();
 
-router.get('/photos/places/calnight', (req, res) => res.redirect("/photos/calnight"));
-router.get('/photos/places/icelandthermal', (req, res) => res.redirect("/photos/icelandthermal"));
-router.get('/photos/abstract/dancelight', (req, res) => res.redirect("/photos/dancelight"));
-router.get('/photos/journeys/jinghangyunhe', (req, res) => res.redirect("/photos/jinghangyunhe"));
-router.get('/photos/journeys/lashioroad', (req, res) => res.redirect("/photos/lashioroad"));
-router.get('/photos/journeys/timetravelchina', (req, res) => res.redirect("/photos/timetravelchina"));
-router.get('/projects/blur', (req, res) => res.redirect("/posts/blur"));
+const redirects = {
+  "/photos/places/calnight": "/photos/calnight",
+  "/photos/places/icelandthermal": "/photos/icelandthermal",
+  "/photos/abstract/dancelight": "/photos/dancelight",
+  "/photos/journeys/jinghangyunhe": "/photos/jinghangyunhe",
+  "/photos/journeys/lashioroad": "/photos/lashioroad",
+  "/photos/journeys/timetravelchina": "/photos/timetravelchina",
+  "/projects/blur": "/posts/blur",
+};
+
+for(const [url_from, url_to] of Object.entries(redirects)) {
+  router.get(url_from, (req, res) => res.redirect(url_to));
+}
 
 module.exports = router;
