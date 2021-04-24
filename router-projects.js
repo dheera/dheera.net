@@ -92,7 +92,7 @@ router.get('/', (req, res) => {
 
         res.render("projects/index.html", { projectsFeatured: projectsFeatured, projectsUnfeatured: projectsUnfeatured, userInfo : req.userInfo });
     }, reason => {
-        log.error(["photo_index", reason]);
+        log.error(["projects_index", reason]);
         res.sendStatus(500);
     });
 });

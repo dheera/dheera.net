@@ -2,28 +2,28 @@ const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('express').Router();
 const aws = require('./aws');
 const fs = require('fs');
-const config_posts = JSON.parse(fs.readFileSync('./config/photos.json', 'utf8'));
+const config_posts = JSON.parse(fs.readFileSync('./config/posts.json', 'utf8'));
 const md5 = require('md5');
 
 let getPosts = () => new Promise((resolve, reject) => {
-    aws.listObjects({Bucket: config_posts.bucket, Prefix: config_posts.prefix, Delimiter: "/"})
+    aws.listObjects_cached({Bucket: config_posts.bucket, Prefix: config_posts.prefix, Delimiter: "/"})
     .then(
         result => {
-             let albumNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_posts.prefix, "").replace("/", ""));
-             let albums = [];
+             let postNames = result.CommonPrefixes.map(item => item.Prefix.replace(config_posts.prefix, "").replace("/", ""));
              let promises = [];
-             for(i in albumNames) {
-                 promises.push(getAlbum(albumNames[i]));
+             for(i in postNames) {
+                 promises.push(getPost(postNames[i]));
              }
              Promise.allSettled(promises).then(results => {
+		 let posts = [];
                  for(i in results) {
                      if(results[i].status === "fulfilled") {
-                         album = results[i].value;
-                         album.name = albumNames[i];
-                         albums.push(album);
+                         post = results[i].value;
+                         post.name = postNames[i];
+                         posts.push(post);
                      }
                  }
-                 resolve(albums);
+                 resolve(posts);
              });
         },
         reason => reject(reason)
@@ -31,19 +31,31 @@ let getPosts = () => new Promise((resolve, reject) => {
 });
 
 let getPost = (postName) => new Promise((resolve, reject) => {
-    aws.getObject({Bucket: config_posts.bucket, Key: config_posts.prefix + postName + "/index.html"})
+    aws.getObject_cached({Bucket: config_posts.bucket, Key: config_posts.prefix + postName + "/index.html"})
     .then(
         data => {
             let index = {};
-            body = data.Body.toString('utf-8');
-            try {
-                index = JSON.parse(body.match(/<!--(.*?)-->/)[1]);
-            } catch(e) {
-                log.error(["getPost", e]);
-                index = {};
+            let body = data.Body.toString('utf-8');
+            let infoMatch = body.match(/<!--(.*?)-->/s);
+	    if(infoMatch) {
+                try {
+                    index = JSON.parse(infoMatch[1]);
+                } catch(e) {
+                    log.error(["getPost", e]);
+                    index = { "title": postName };
+                }
+            } else {
+                index = { "title": postName };
             }
+
+            let baseUrl = "https://" + config_posts.domain + "/" + config_posts.prefix + postName + "/";
+
+            body = body.replace(/src="(.*?)"/g, 'src="' + baseUrl + "$1" + '"');
+
             resolve({
                 title: index.title || "",
+                subtitle: index.subtitle || "",
+                image: postName + "/" + index.image,
                 body: body,
             });
         },
@@ -51,21 +63,30 @@ let getPost = (postName) => new Promise((resolve, reject) => {
     );
 });
 
+let getSignedImageURL = (imageFile, params) => {
+    let path = imageFile + "?" + params;
+    let checksum = md5(config_posts.imgixSecureToken + "/" + config_posts.prefix + path); // imgix uses MD5, not my choice
+    let url = "https://" + config_posts.imgixDomain + "/" + config_posts.prefix + path + "&s=" + checksum;
+    return url;
+}
+
 router.get('/', (req, res) => {
     getPosts()
-    .then(
-        posts => res.render("posts/index.html", { posts: posts, userInfo: req.userInfo }),
-        reason => {
-            log.error(["posts_index", reason]);
-            res.sendStatus(500);
+    .then((posts) =>{
+          res.render("posts/index.html", { posts: posts, userInfo: req.userInfo })
+        },
+	reason => {
+          log.error(["posts_index", reason]);
+          res.sendStatus(500);
         }
     );
 });
 
 router.get('/:postName', (req, res) => {
+    console.log(req.params);
     getPost(req.params["postName"])
     .then(
-        post => res.render('projecs/post.html', { post: post, userInfo: req.userInfo }),
+        post => res.render('posts/post.html', { post: post, userInfo: req.userInfo }),
         reason => {
             log.error(["posts", reason]);
             if(reason && reason.code === "NoSuchKey") return res.sendStatus(404);

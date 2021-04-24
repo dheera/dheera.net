@@ -8,7 +8,7 @@ const redirects = {
   "/photos/journeys/jinghangyunhe": "/photos/jinghangyunhe",
   "/photos/journeys/lashioroad": "/photos/lashioroad",
   "/photos/journeys/timetravelchina": "/photos/timetravelchina",
-  "/projects/blur": "/posts/blur",
+  "/projects/blur": "/posts/20140725-why-you-should-never-use-pixelation/",
 };
 
 for(const [url_from, url_to] of Object.entries(redirects)) {
