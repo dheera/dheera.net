@@ -56,6 +56,7 @@ let getPost = (postName) => new Promise((resolve, reject) => {
                 title: index.title || "",
                 subtitle: index.subtitle || "",
                 image: postName + "/" + index.image,
+		date: postName.substr(0,4) + "-" + postName.substr(4, 2) + "-" + postName.substr(6, 2),
                 body: body,
             });
         },

@@ -4,8 +4,12 @@
 
 <h1>Posts</h1>
 
+I intend to write more blog posts in the future, hence this section. Excuse the emptiness for now!
+
+<br><br>
+
 {% for post in posts %} 
-<a href="/posts/{{post.name}}/"><b>{{post.title}}</b></a><br>
+<a href="/posts/{{post.name}}/"><b>{{post.title}}</b></a> <small><i>{{post.date}}</i></small><br>
 {{post.subtitle}}<br>
 <br>
 <br>
