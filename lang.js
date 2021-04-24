@@ -8,7 +8,7 @@
 // app.use(lang);
 //
 // Content:
-// Simply put multiple language code anywhere in your HTML as [!lang:text|lang:text!], e.g.
+// Simply put multiple language code anywhere in your HTML as [!lang0:text0|lang1:text1!], e.g.
 // 
 // <h1>[!en:Hello|es:Hola|zh:哈嘍!]</h1>
 // [!en:This is a test|es:Esto es una prueba|zh:這是一個測試!]
