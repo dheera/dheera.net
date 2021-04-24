@@ -51,6 +51,8 @@ body.light {
 
 img: { border:0; }
 
+i:not(.fas):not(.fab) {margin-left:.15em;margin-right:.1em;} /* fix for Saira Semi Condensed italic mushing */
+
 h1, h2, h3, h4, h5 {
     color:#ffffff;
     font-weight:300;
