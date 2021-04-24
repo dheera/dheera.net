@@ -29,7 +29,10 @@ let filtered = (content, acceptLanguage) => {
     let langStrings = $1.split("|");
     let stringsByLang = {};
     for(i in langStrings) {
-      let [lang, text] = langStrings[i].split(":", 2);
+      let index = langStrings[i].indexOf(":");
+      if(!index) continue;
+      let lang = langStrings[i].substr(0, index);
+      let text = langStrings[i].substr(index+1);
       stringsByLang[lang] = text;
     }
 
@@ -43,15 +46,22 @@ let filtered = (content, acceptLanguage) => {
 };
 
 let lang = (req, res, next) => {
+
   res.write_ = res.write;
   res.send_ = res.send;
 
   res.write = (content) => {
-    res.write_(filtered(content, req.headers["accept-language"]));
+    let acceptLanguage = req.headers["accept-language"];
+    if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang); }
+    else if(req.cookies.lang) { acceptLanguage = req.cookies.lang; }
+    res.write_(filtered(content, acceptLanguage));
   };
 
   res.send = (content) => {
-    res.send_(filtered(content, req.headers["accept-language"]));
+    let acceptLanguage = req.headers["accept-language"];
+    if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang); }
+    else if(req.cookies.lang) { acceptLanguage = req.cookies.lang; }
+    res.send_(filtered(content, acceptLanguage));
   };
 
   return next();

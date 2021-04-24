@@ -95,9 +95,13 @@ a:visited {
   z-index:1000;
   -webkit-user-select:none;
   -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
   user-select:none;
   -webkit-transition:background-color 0.3s ease;
   -moz-transition:background-color 0.3s ease;
+  -ms-transition:background-color 0.3s ease;
+  -o-transition:background-color 0.3s ease;
   transition:background-color 0.3s ease;
 }
 
@@ -110,13 +114,22 @@ a:visited {
 
 .navbar-logo {
   position:static;
-  margin-right:20pt;
   height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
   float:left;
   opacity:0.5;
+  width:150px;
+}
+
+.navbar-right {
+  height:100%;
+  width:calc( 100% - 210px );
+  float:right;
+  overflow:hidden;
+  text-align:right;
+  margin-right:40pt;
 }
 
 .light .navbar-logo {
@@ -128,13 +141,47 @@ a:visited {
   vertical-align:middle;
 }
 
-.navbar-button-light {
+.navbar-button-lang {
+  position:static;
+  display:inline-block;
+  width:30pt;
+  height:30pt;
+  line-height:30pt;
+  vertical-align:middle;
+  cursor:pointer;
+  color:#808080;
+}
+
+.navbar-button-lang-icon {
+  background:#808080;
+  width:20pt;
+  height:20pt;
+  font-size:11pt;
+  font-weight:700;
   display:flex;
   align-items:center;
   justify-content:center;
-  width:100pt;
-  height:100%;
-  float:right;
+  color:#303030;
+  border-radius:4pt;
+  cursor:pointer;
+  position:relative;
+  top:50%;
+  left:50%;
+  margin-top:-10pt;
+  margin-left:-10pt;
+}
+
+.light .navbar-button-lang-icon {
+  color:#ffffff;
+}
+
+.navbar-button-light {
+  position:static;
+  display:inline-block;
+  width:30pt;
+  height:30pt;
+  line-height:30pt;
+  vertical-align:middle;
   cursor:pointer;
   color:#808080;
 }
@@ -142,14 +189,12 @@ a:visited {
 .navbar-link {
   text-transform:uppercase;
   position:static;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:inline-block;
   width:15%;
-  height:100%;
+  height:30pt;
+  text-align:center;
   vertical-align:middle;
-  line-height:100vh;
-  float:right;
+  line-height:30pt;
 }
 
 @media only screen and (max-width: 900px) {
@@ -176,6 +221,8 @@ a:visited {
     background-color:rgba(40, 40, 40, 0.7);
     -webkit-backdrop-filter: blur(20px);
     -moz-backdrop-filter: blur(20px);
+    -ms-backdrop-filter: blur(20px);
+    -o-backdrop-filter: blur(20px);
     backdrop-filter: blur(8px);
   }
 }
@@ -198,6 +245,8 @@ a:visited {
     background-color:rgba(255, 255, 255, 0.7);
     -webkit-backdrop-filter: blur(20px);
     -moz-backdrop-filter: blur(20px);
+    -ms-backdrop-filter: blur(20px);
+    -o-backdrop-filter: blur(20px);
     backdrop-filter: blur(8px);
   }
 }
@@ -227,7 +276,9 @@ a:visited {
   margin-top:40pt;
   line-height:0;
   -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
+  -o-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
 

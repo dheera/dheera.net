@@ -3,8 +3,10 @@ const express = require('express');
 const minifyHTML = require('express-minify-html');
 const nunjucks = require('nunjucks');
 const fs = require('fs');
+const cookieParser = require('cookie-parser');
 const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('./router');
+
 
 var app = express();
 var http = require('http').Server(app);
@@ -13,6 +15,8 @@ nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
+
+app.use(cookieParser());
 
 app.use(minifyHTML({
     override: true,

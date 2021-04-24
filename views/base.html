@@ -34,10 +34,13 @@
 {% block body %}
   <div class="navbar">
     <div class="navbar-logo"><img src="/images/logo-white.png"></div>
-    <div class="navbar-button-light" onclick="toggleLight();"><i class="fas fa-moon"></i></div>
-    <div class="navbar-link"><a href="/photos">photography</a></div>
-    <div class="navbar-link"><a href="/projects">projects</a></div>
-    <div class="navbar-link"><a href="/about">me</a></div>
+    <div class="navbar-right">
+      <div class="navbar-link"><a href="/about">me</a></div>
+      <div class="navbar-link"><a href="/projects">projects</a></div>
+      <div class="navbar-link"><a href="/photos">photography</a></div>
+      <div class="navbar-button-lang" onclick="window.location.href='?lang=[!en:zh|zh:en!]';"><div class="navbar-button-lang-icon">[!en:EN|zh:中!]</div></div>
+      <div class="navbar-button-light" onclick="toggleLight();"><i class="fas fa-moon"></i></div>
+    </div>
   </div>
   <div class="page">
     <div class="content">
