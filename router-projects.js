@@ -20,7 +20,7 @@ let getProjects = () => new Promise((resolve, reject) => {
                      if(results[i].status === "fulfilled") {
                          project = results[i].value;
                          project.name = projectNames[i];
-                         projects.push(album);
+                         projects.push(project);
                      }
                  }
                  resolve(projects);
@@ -55,7 +55,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
             resolve({
                 title: index.title || "",
                 subtitle: index.subtitle || "",
-                image: baseUrl + index.image,
+                image: projectName + "/" + index.image,
                 body: body,
             });
         },
@@ -63,15 +63,38 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
     );
 });
 
+let getSignedImageURL = (imageFile, params) => {
+    let path = imageFile + "?" + params;
+    let checksum = md5(config_projects.imgixSecureToken + "/" + config_projects.prefix + path); // imgix uses MD5, not my choice
+    let url = "https://" + config_projects.imgixDomain + "/" + config_projects.prefix + path + "&s=" + checksum;
+    return url;
+}
+
 router.get('/', (req, res) => {
-    getProjects()
-    .then(
-        projects => res.render("projects/index.html", { projects: projects, userInfo : req.userInfo }),
-        reason => {
-            log.error(["projects_index", reason]);
-            res.sendStatus(500);
+    Promise.all([
+      aws.getObject_cached({Bucket: config_projects.bucket, Key: config_projects.prefix + "index.json"}),
+      getProjects()
+    ])
+    .then((data) => {
+        let index = JSON.parse(data[0].Body.toString('utf-8'));
+	let projects = data[1];
+
+        let featured = index["featured"] || [];
+
+        let projectsUnfeatured = [];
+	let projectsFeatured = [];
+
+        for(i in projects) {
+            projects[i].thumbnail = getSignedImageURL(projects[i].image, "w=250&h=250&fit=crop&q=50");
+            if(featured.includes(projects[i].name)) projectsFeatured.push(projects[i]);
+            else projectsUnfeatured.push(projects[i]);
         }
-    );
+
+        res.render("projects/index.html", { projectsFeatured: projectsFeatured, projectsUnfeatured: projectsUnfeatured, userInfo : req.userInfo });
+    }, reason => {
+        log.error(["photo_index", reason]);
+        res.sendStatus(500);
+    });
 });
 
 router.get('/:projectName', (req, res) => {

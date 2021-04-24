@@ -2,6 +2,31 @@
 
 {% block content %}
 
-FOO
+<div class="album-grid-featured">
+    {% for project in projectsFeatured %}
+    <a href="/projects/{{project.name}}/">
+    <div class="album">
+        <div class="album-text">
+          <div class="album-title">{{project.title}}</div>
+	  <div class="album-subtitle">{{project.subtitle}}</div>
+	</div>
+	<img src="{{project.thumbnail}}">
+    </div>
+    </a>
+    {% endfor %}
+</div>
+
+<div class="album-grid-unfeatured">
+    {% for project in projectsUnfeatured %}
+    <a href="/projects/{{project.name}}/">
+    <div class="album">
+        <div class="album-text">
+	  <div class="album-title">{{project.title}}</div>
+        </div>
+	<img src="{{project.thumbnail}}">
+    </div>
+    </a>
+    {% endfor %}
+</div>
 
 {% endblock %}
