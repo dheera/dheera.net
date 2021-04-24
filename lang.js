@@ -36,6 +36,7 @@ let filtered = (content, acceptLanguage) => {
     let language = acceptLanguageParser.pick(Object.keys(stringsByLang), acceptLanguage) || "en";
     // console.log(acceptLanguage, language);
     if(language in stringsByLang) return stringsByLang[language];
+    if(Object.values(stringsByLang).length > 0) return Object.values(stringsByLang)[0];
 
     return $1;
   });
