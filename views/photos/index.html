@@ -2,22 +2,29 @@
 
 {% block content %}
 
-<div class="featured-album-list">
-    {% for album in featured_albums %}
+<h1>Featured collections</h1>
+<div class="album-grid-featured">
+    {% for album in albumsFeatured %}
     <a href="/photos/{{album.name}}/">
     <div class="album">
-	<div class="album-title">{{album.title}}</div>
+        <div class="album-text">
+          <div class="album-title">{{album.title}}</div>
+	  <div class="album-subtitle">{{album.subtitle}}</div>
+	</div>
 	<img src="{{album.thumbnail}}">
     </div>
     </a>
     {% endfor %}
 </div>
 
-<div class="album-list">
-    {% for album in albums %}
+<h2>More photography</h2>
+<div class="album-grid-unfeatured">
+    {% for album in albumsUnfeatured %}
     <a href="/photos/{{album.name}}/">
     <div class="album">
-	<div class="album-title">{{album.title}}</div>
+        <div class="album-text">
+	  <div class="album-title">{{album.title}}</div>
+        </div>
 	<img src="{{album.thumbnail}}">
     </div>
     </a>

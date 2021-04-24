@@ -1,32 +1,35 @@
 {% extends "html.html" %}
 
 {% block head %}
+  <!-- FOUC prevention (reversed by the base.css stylesheet) -->
   <style>html{visibility: hidden;opacity:0;}</style>
+
   <title>{% if title %}{% block title %}{% endblock %} | {% endif %}dheera.net | Dheera Venkatraman's web site</title>
+
   {% block meta %}{% endblock %}
+
   <meta http-equiv="Content-type" content="text/html;charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@300;500;700&display=swap" rel="stylesheet"> -->
+  <meta name="HandheldFriendly" content="true">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="/css/base.css?version=0">
+
+  <!-- fontawesome -->
   <link rel="stylesheet" type="text/css" href="/fa/css/all.css">
-<!--  <script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
-  <script type="text/javascript" src="/static/js/jquery.swipebox.js"></script>
-  <script type="text/javascript" src="/static/js/jquery.transit.min.js"></script> -->
-
+  <!-- /fontawesome -->
+  
+  <!-- photoswipe -->
   <!-- Core CSS file -->
-<link rel="stylesheet" href="/ps/photoswipe.css">
-
-<!-- Skin CSS file (styling of UI - buttons, caption, etc.)
+  <link rel="stylesheet" href="/ps/photoswipe.css">
+  <!-- Skin CSS file (styling of UI - buttons, caption, etc.)
      In the folder of skin CSS file there are also:
      - .png and .svg icons sprite,
      - preloader.gif (for browsers that do not support CSS animations) -->
-<link rel="stylesheet" href="/ps/default-skin/default-skin.css">
-
-<!-- Core JS file -->
-<script src="/ps/photoswipe.min.js"></script>
-
-<!-- UI JS file -->
-<script src="/ps/photoswipe-ui-default.min.js"></script>
+  <link rel="stylesheet" href="/ps/default-skin/default-skin.css">
+  <!-- Core JS file -->
+  <script src="/ps/photoswipe.min.js"></script>
+  <!-- UI JS file -->
+  <script src="/ps/photoswipe-ui-default.min.js"></script>
+  <!-- /photoswipe -->
 
   <script type="text/javascript" src="/js/base.js"></script>
 {% endblock %}
@@ -35,11 +38,16 @@
   <div class="navbar">
     <div class="navbar-logo"><img src="/images/logo-white.png"></div>
     <div class="navbar-right">
-      <div class="navbar-link"><a href="/about">me</a></div>
-      <div class="navbar-link"><a href="/projects">projects</a></div>
-      <div class="navbar-link"><a href="/photos">photography</a></div>
+      <span class="navbar-desktop">
+      <div class="navbar-link"><a href="/about">[!en:me|zh:自我介紹!]</a></div>
+      <div class="navbar-link"><a href="/projects">[!en:projects|zh:項目!]</a></div>
+      <div class="navbar-link"><a href="/photos">[!en:photography|zh:攝影!]</a></div>
+      </span>
       <div class="navbar-button-lang" onclick="window.location.href='?lang=[!en:zh|zh:en!]';"><div class="navbar-button-lang-icon">[!en:EN|zh:中!]</div></div>
       <div class="navbar-button-light" onclick="toggleLight();"><i class="fas fa-moon"></i></div>
+    </div>
+    <div class="navbar-mobile">
+      <a href="/about">[!en:me|zh:自我介紹!]</a> &nbsp;&nbsp; | &nbsp;&nbsp; <a href="/projects">[!en:projects|zh:項目!]</a> &nbsp;&nbsp; | &nbsp;&nbsp; <a href="/photos">[!en:photography|zh:攝影!]</a>
     </div>
   </div>
   <div class="page">
@@ -48,9 +56,11 @@
       {% endblock %}
     </div>
     <div class="footer">
-      <i class="fas fa-copyright"></i>&nbsp;&nbsp;Dheera&nbsp;Venkatraman
-      &nbsp;&nbsp;&nbsp;<i class="fas fa-envelope"></i>&nbsp;&nbsp;dheera&nbsp;[at]&nbsp;dheera&nbsp;[dot]&nbsp;net
-      &nbsp;&nbsp;&nbsp;<i class="fab fa-weixin"></i>&nbsp;&nbsp;dheeranet
+      <nobr><i class="fas fa-copyright"></i>&nbsp;&nbsp;Dheera&nbsp;Venkatraman</nobr>
+      &nbsp;&nbsp;&nbsp;
+      <nobr><i class="fas fa-envelope"></i>&nbsp;&nbsp;dheera&nbsp;[at]&nbsp;dheera&nbsp;[dot]&nbsp;net</nobr>
+      &nbsp;&nbsp;&nbsp;
+      <nobr><i class="fab fa-weixin"></i>&nbsp;&nbsp;dheeranet</nobr>
     </div>
   </div>
 

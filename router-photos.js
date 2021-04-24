@@ -60,6 +60,8 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
             resolve({
                 imageFiles: imageFiles || [],
                 title: index.title || "",
+                subtitle: index.subtitle || "",
+                license: index.license || "",
                 description: (index.description || "").replace(/\n/gs, "<br>"),
                 thumbAspectRatio: index.thumbAspectRatio || 1.0,
             });
@@ -76,13 +78,31 @@ let getSignedImageURL = (imageFile, params) => {
 }
 
 router.get('/', (req, res) => {
-    getAlbums()
-    .then(albums => {
+    Promise.all([
+      aws.getObject_cached({Bucket: config_photos.bucket, Key: config_photos.prefix + "index.json"}),
+      getAlbums(),
+    ])
+    .then((data) => {
+        let index = JSON.parse(data[0].Body.toString('utf-8'));
+	let albums = data[1];
+
+        let featured = index["featured"] || [];
+
+        let albumsUnfeatured = [];
+	let albumsFeatured = [];
+
+	console.log(index);
+
         for(i in albums) {
             albums[i].thumbnail = getSignedImageURL(albums[i].imageFiles[0], "w=250&h=250&fit=crop&q=50");
+            if(featured.includes(albums[i].name)) albumsFeatured.push(albums[i]);
+            else albumsUnfeatured.push(albums[i]);
         }
+
         res.render('photos/index.html', {
             albums: albums,
+            albumsFeatured,
+            albumsUnfeatured,
             userInfo: req.userInfo,
         });
     }, reason => {
@@ -106,7 +126,9 @@ router.get('/:albumName', (req, res) => {
             res.render('photos/album.html', {
                 images: images,
                 title: album.title,
+                subtitle: album.subtitle,
                 description: album.description,
+                license: album.license,
                 thumbAspectRatio: album.thumbAspectRatio,
                 userInfo: req.userInfo,
             })
