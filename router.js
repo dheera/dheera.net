@@ -7,6 +7,9 @@ const routerProjects = require('./router-projects');
 const routerRedirects = require('./router-redirects');
 const geoip = require('geoip-lite');
 const path = require('path');
+const lang = require('./lang');
+
+router.use(lang);
 
 router.use((req, res, next) => {
   req.realIp = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection.remoteAddress;
@@ -60,7 +63,9 @@ router.use((req, res, next) => {
 router.use('/', routerRedirects);
 router.use('/css', express.static(path.join(__dirname, 'static/css'), {maxAge: 10000}));
 router.use('/js', express.static(path.join(__dirname, 'static/js'), {maxAge: 10000}));
-router.use('/', express.static(path.join(__dirname, 'static'), {maxAge: 3600000}));
+router.use('/fa', express.static(path.join(__dirname, 'static/fa'), {maxAge: 86400000 * 365}));
+router.use('/fonts', express.static(path.join(__dirname, 'static/fonts'), {maxAge: 86400000 * 365}));
+router.use('/', express.static(path.join(__dirname, 'static'), {maxAge: 86400000}));
 router.get('/about', (req, res) => res.render('about.html', { userInfo: req.userInfo }));
 router.use('/photos', routerPhotos);
 router.use('/projects', routerProjects);

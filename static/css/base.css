@@ -28,6 +28,8 @@
 
 html {
     margin:0;
+    visibility:visible;
+    opacity:1;
 }
 
 body {
