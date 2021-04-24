@@ -36,10 +36,11 @@
 
 {% block body %}
   <div class="navbar">
-    <div class="navbar-logo"><img src="/images/logo-white.png"></div>
+    <div class="navbar-logo"><a href="/"><img src="/images/logo-white.png"></a></div>
     <div class="navbar-right">
       <span class="navbar-desktop">
       <div class="navbar-link"><a href="/about">[!en:me|zh:自我介紹!]</a></div>
+      <div class="navbar-link"><a href="/posts">[!en:posts|zh:帖文!]</a></div>
       <div class="navbar-link"><a href="/projects">[!en:projects|zh:項目!]</a></div>
       <div class="navbar-link"><a href="/photos">[!en:photography|zh:攝影!]</a></div>
       </span>
@@ -47,7 +48,13 @@
       <div class="navbar-button-light" onclick="toggleLight();"><i class="fas fa-moon"></i></div>
     </div>
     <div class="navbar-mobile">
-      <a href="/about">[!en:me|zh:自我介紹!]</a> &nbsp;&nbsp; | &nbsp;&nbsp; <a href="/projects">[!en:projects|zh:項目!]</a> &nbsp;&nbsp; | &nbsp;&nbsp; <a href="/photos">[!en:photography|zh:攝影!]</a>
+      <a href="/about">[!en:me|zh:自我介紹!]</a>
+      &nbsp;&nbsp; | &nbsp;&nbsp;
+      <a href="/posts">[!en:posts|zh:帖文!]</a>
+      &nbsp;&nbsp; | &nbsp;&nbsp;
+      <a href="/projects">[!en:projects|zh:項目!]</a>
+      &nbsp;&nbsp; | &nbsp;&nbsp;
+      <a href="/photos">[!en:photography|zh:攝影!]</a>
     </div>
   </div>
   <div class="page">

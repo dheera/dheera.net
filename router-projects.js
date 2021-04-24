@@ -55,6 +55,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
             resolve({
                 title: index.title || "",
                 subtitle: index.subtitle || "",
+                image: baseUrl + index.image,
                 body: body,
             });
         },

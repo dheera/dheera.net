@@ -49,6 +49,8 @@ body.light {
     color:#000000;
 }
 
+img: { border:0; }
+
 h1, h2, h3, h4, h5 {
     color:#ffffff;
     font-weight:300;
@@ -62,12 +64,16 @@ h1 { font-size:40pt; }
 h2 { font-size:35pt; }
 h3 { font-size:30pt; }
 h4 { font-size:25pt; }
+h5 { font-size:20pt; }
+h5 { font-size:16pt; }
 
 @media only screen and (max-width: 899px) {
-  h1 { font-size: 30pt; }
-  h2 { font-size: 25pt; }
-  h3 { font-size: 20pt; }
-  h3 { font-size: 15pt; }
+  h1 { font-size:30pt; }
+  h2 { font-size:25pt; }
+  h3 { font-size:20pt; }
+  h4 { font-size:15pt; }
+  h5 { font-size:14pt; }
+  h6 { font-size:13pt; }
   body { font-size:12pt; }
 }
 
@@ -147,6 +153,7 @@ a:visited {
 }
 
 .navbar-mobile {
+  text-transform:uppercase;
   display:none;
   position:absolute;
   top:70pt;
@@ -226,7 +233,7 @@ a:visited {
   text-transform:uppercase;
   position:static;
   display:inline-block;
-  width:calc( 33.3333333% - 40pt );
+  width:calc( 25% - 40pt );
   height:30pt;
   text-align:center;
   vertical-align:middle;
@@ -252,6 +259,7 @@ a:visited {
 @media only screen and (min-width: 900px) {
   html:not([data-scroll='0']) .navbar {
     background-color:rgba(40, 40, 40, 0.7);
+    box-shadow:4px 4px 4px rgba(0,0,0,0.1);
     -webkit-backdrop-filter: blur(20px);
     -moz-backdrop-filter: blur(20px);
     -ms-backdrop-filter: blur(20px);
@@ -284,7 +292,8 @@ a:visited {
 
 @media only screen and (min-width: 900px) {
   html:not([data-scroll='0']) .light .navbar {
-    background-color:rgba(255, 255, 255, 0.7);
+    background-color:rgba(235, 235, 235, 0.7);
+    box-shadow:4px 4px 4px rgba(0,0,0,0.1);
     -webkit-backdrop-filter: blur(20px);
     -moz-backdrop-filter: blur(20px);
     -ms-backdrop-filter: blur(20px);
