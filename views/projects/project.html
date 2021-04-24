@@ -2,10 +2,11 @@
 
 {% block content %}
 
-<h1 class="title">{{ project.title }}: {{ project.subtitle}}</h1>
-
-<div class="markup-content">
-  {{ project.body|safe }}
+<div class="project-content">
+  <h1 class="title">{{ project.title }}: {{ project.subtitle}}</h1>
+  <div class="markup-content">
+    {{ project.body|safe }}
+  </div>
 </div>
 
 {% endblock %}
