@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 	let projectsFeatured = [];
 
         for(i in projects) {
-            projects[i].thumbnail = contentFetcher.getProjectsSignedImageURL(projects[i].image, "w=250&h=250&fit=crop&q=50");
+            projects[i].thumbnail = contentFetcher.getSignedImageURL(projects[i].image, "w=250&h=250&fit=crop&q=50");
             if(featured.includes(projects[i].name)) projectsFeatured.push(projects[i]);
             else projectsUnfeatured.push(projects[i]);
         }

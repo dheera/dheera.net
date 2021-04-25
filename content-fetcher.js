@@ -48,7 +48,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
                 try {
                     index = JSON.parse(infoMatch[1]);
                 } catch(e) {
-                    log.error(["getProject", e]);
+                    log.error(["getProject", [projectName, e]]);
                     index = { "title": projectName };
                 }
             } else {
@@ -62,7 +62,7 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
             resolve({
                 title: index.title || "",
                 subtitle: index.subtitle || "",
-                image: projectName + "/" + index.image,
+                image: config_projects.prefix + projectName + "/" + index.image,
                 body: body,
             });
         },
@@ -122,7 +122,7 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
 
             imageFiles = [];
             for (i in objectList) {
-                 filename = objectList[i].Key.replace(config_photos.prefix, "");
+                 filename = objectList[i].Key;
                  if(filename.indexOf(".jpg") !== -1) {
                      imageFiles.push(filename);
                  }
@@ -199,24 +199,10 @@ let getPost = (postName) => new Promise((resolve, reject) => {
     );
 });
 
-let getProjectsSignedImageURL = (imageFile, params) => {
+let getSignedImageURL = (imageFile, params) => {
     let path = imageFile + "?" + params;
-    let checksum = md5(config_projects.imgixSecureToken + "/" + config_projects.prefix + path); // imgix uses MD5, not my choice
-    let url = "https://" + config_projects.imgixDomain + "/" + config_projects.prefix + path + "&s=" + checksum;
-    return url;
-}
-
-let getPostsSignedImageURL = (imageFile, params) => {
-    let path = imageFile + "?" + params;
-    let checksum = md5(config_posts.imgixSecureToken + "/" + config_posts.prefix + path); // imgix uses MD5, not my choice
-    let url = "https://" + config_posts.imgixDomain + "/" + config_posts.prefix + path + "&s=" + checksum;
-    return url;
-}
-
-let getAlbumSignedImageURL = (imageFile, params) => {
-    let path = imageFile + "?" + params;
-    let checksum = md5(config_photos.imgixSecureToken + "/" + config_photos.prefix + path); // imgix uses MD5, not my choice
-    let url = "https://" + config_photos.imgixDomain + "/" + config_photos.prefix + path + "&s=" + checksum;
+    let checksum = md5(config_photos.imgixSecureToken + "/" + path); // imgix uses MD5, not my choice
+    let url = "https://" + config_photos.imgixDomain + "/" + path + "&s=" + checksum;
     return url;
 }
 
@@ -232,7 +218,5 @@ module.exports = {
   getAlbumsIndex: getAlbumsIndex,
   getPost: getPost,
   getPosts: getPosts,
-  getProjectsSignedImageURL: getProjectsSignedImageURL,
-  getAlbumSignedImageURL: getAlbumSignedImageURL,
-  getPostsSignedImageURL: getPostsSignedImageURL,
+  getSignedImageURL: getSignedImageURL,
 }
