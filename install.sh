@@ -21,6 +21,12 @@ rm -rf config.tar.gz
 gpg config.tar.gz.gpg
 tar -zxvf config.tar.gz
 
+sudo npm install -g pm2
+pm2 startup | tail -1 | bash
+pm2 stop index.js
+pm2 start index.js --restart-delay=1000 --watch
+pm2 save
+
 sudo cp -rv files/* /
 sudo service nginx restart
 
