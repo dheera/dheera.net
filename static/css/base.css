@@ -412,8 +412,51 @@ a:visited {
   height:100%;
   background:#504030;
   display:flex;
-  justify-content:center;
+  justify-content:left;
   align-items:center;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:top center;
+}
+
+.front-feature-big .text {
+  margin-left:20pt;
+  margin-right:20pt;
+}
+
+.front-feature-big .title {
+  font-size:36pt;
+  line-height:40pt;
+  margin-bottom:15pt;
+} 
+
+.front-feature-big .subtitle {
+  font-size:18pt;
+}
+
+.front-feature-big i, .front-feature-small i, .front-button i {
+  color:#ffffff;
+  opacity:0.3;
+}
+
+.front-features a:link, .front-features a:visited, .front-button a:link, .front-button a:visited {
+  color:#ffffff;
+  text-decoration:none;
+}
+
+.front-feature-small .text {
+  margin-left:20pt;
+  margin-right:20pt;
+}
+
+.front-feature-small .title {
+  font-size:24pt;
+  line-height:28pt;
+  margin-bottom:15pt;
+} 
+
+.front-feature-small .subtitle {
+  font-size:14pt;
 }
 
 .front-features-small {
@@ -474,16 +517,6 @@ a:visited {
   color:#ffffff;
   text-decoration:none;
   font-size:24pt;
-}
-
-.front-button i {
-  color:#ffffff;
-  opacity:0.3;
-}
-
-.front-button a:link, .front-button a:visited {
-  color:#ffffff;
-  text-decoration:none;
 }
 
 .front-buttons a:nth-child(1) .front-button {
