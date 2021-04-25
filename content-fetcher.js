@@ -95,10 +95,11 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
             resolve({
 		_type: "project",
 		name: projectName,
+		classes: index.classes ? index.classes : "",
 		url: "/" + config_projects.prefix + projectName + "/",
                 title: index.title || "",
                 subtitle: index.subtitle || "",
-                image: config_projects.prefix + projectName + "/" + index.image,
+                image: index.image ? (config_projects.prefix + projectName + "/" + index.image) : "",
                 body: body,
             });
         },
@@ -166,8 +167,9 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
             resolve({
 		_type: "album",
 		name: albumName,
+		classes: index.classes ? index.classes : "",
 		url: "/" + config_photos.prefix + albumName + "/",
-                image: imageFiles[0],
+                image: index.image ? (config_photos.prefix + albumName + "/" + index.image) : imageFiles[0],
                 imageFiles: imageFiles || [],
                 title: index.title || "",
                 subtitle: index.subtitle || "",
@@ -230,10 +232,11 @@ let getPost = (postName) => new Promise((resolve, reject) => {
             resolve({
 		_type: "post",
 		name: postName,
+		classes: index.classes ? index.classes : "",
 		url: "/" + config_posts.prefix + postName + "/",
                 title: index.title || "",
                 subtitle: index.subtitle || "",
-                image: config_posts.prefix + postName + "/" + index.image,
+                image: index.image ? (config_posts.prefix + postName + "/" + index.image) : "",
 		date: postName.substr(0,4) + "-" + postName.substr(4, 2) + "-" + postName.substr(6, 2),
                 body: body,
             });
