@@ -8,6 +8,7 @@ const routerRedirects = require('./router-redirects');
 const geoip = require('geoip-lite');
 const path = require('path');
 const lang = require('./lang');
+const contentFetcher = require('./content-fetcher');
 
 router.use(lang);
 
@@ -70,7 +71,16 @@ router.get('/about', (req, res) => res.render('about.html', { userInfo: req.user
 router.use('/photos', routerPhotos);
 router.use('/projects', routerProjects);
 router.use('/posts', routerPosts);
-router.get('/', (req, res) => res.render('index.html', { userInfo: req.userInfo }));
+
+router.get('/', (req, res) => {
+  contentFetcher.getIndex().then(
+    index => res.render('index.html', { index: index, userInfo: req.userInfo }),
+    reason => {
+      log.error(["index", reason]);
+      res.sendStatus(500);
+    }
+  );
+});
 
 router.get('/api/geo', (req, res) => res.json(req.geo));
 router.get('/api/headers', (req, res) => res.json(req.headers));

@@ -7,6 +7,39 @@ const config_posts = JSON.parse(fs.readFileSync('./config/posts.json', 'utf8'));
 const config_projects = JSON.parse(fs.readFileSync('./config/projects.json', 'utf8'));
 const md5 = require('md5');
 
+let getIndex = () => new Promise((resolve, reject) => {
+    aws.getObject_cached({Bucket: config_projects.bucket, Key: "index.json"})
+    .then(
+      data => {
+        let index = JSON.parse(data.Body.toString('utf-8'));
+        let promises = [];
+        for(i in index.featured) {
+          let [type, name] = index.featured[i].split("/");
+          if(index.featured[i].startsWith(config_photos.prefix)) {
+            promises.push(getAlbum(name));
+	  } else if(index.featured[i].startsWith(config_posts.prefix)) {
+            promises.push(getPost(name));
+	  } else if(index.featured[i].startsWith(config_projects.prefix)) {
+            promises.push(getProject(name));
+	  }
+        }
+
+        Promise.allSettled(promises).then(results => {
+          let featured = [];
+          for(i in results) {
+            if(results[i].status === "fulfilled") {
+              featured.push(results[i].value);
+            } else {
+	      featured.push({"_type": "error", "name": "error", "title": "error", "subtitle": "error"});
+	    }
+	  }
+          resolve({featured: featured});
+        });
+      },
+      reason => reject(reason)
+    )
+});
+
 let getProjectsIndex = () => new Promise((resolve, reject) => {
     aws.getObject_cached({Bucket: config_projects.bucket, Key: config_projects.prefix + "index.json"})
     .then(data => resolve(JSON.parse(data.Body.toString('utf-8'))), reason => reject(reason));
@@ -60,6 +93,9 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
             body = body.replace(/src="(.*?)"/g, 'src="' + baseUrl + "$1" + '"');
 
             resolve({
+		_type: "project",
+		name: projectName,
+		url: "/" + config_projects.prefix + projectName + "/",
                 title: index.title || "",
                 subtitle: index.subtitle || "",
                 image: config_projects.prefix + projectName + "/" + index.image,
@@ -128,6 +164,9 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
                  }
             }
             resolve({
+		_type: "album",
+		name: albumName,
+		url: "/" + config_photos.prefix + albumName + "/",
                 imageFiles: imageFiles || [],
                 title: index.title || "",
                 subtitle: index.subtitle || "",
@@ -188,6 +227,9 @@ let getPost = (postName) => new Promise((resolve, reject) => {
             body = body.replace(/src="(.*?)"/g, 'src="' + baseUrl + "$1" + '"');
 
             resolve({
+		_type: "post",
+		name: postName,
+		url: "/" + config_posts.prefix + postName + "/",
                 title: index.title || "",
                 subtitle: index.subtitle || "",
                 image: postName + "/" + index.image,
@@ -210,6 +252,7 @@ let getSignedImageURL = (imageFile, params) => {
 setInterval(getAlbums, 500);
 
 module.exports = {
+  getIndex: getIndex,
   getProject: getProject,
   getProjects: getProjects,
   getProjectsIndex: getProjectsIndex,
