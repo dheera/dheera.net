@@ -74,7 +74,12 @@ router.use('/posts', routerPosts);
 
 router.get('/', (req, res) => {
   contentFetcher.getIndex().then(
-    index => res.render('index.html', { index: index, userInfo: req.userInfo }),
+    index => {
+      for(i in index.featured) {
+        index.featured[i].backgroundImageURL = contentFetcher.getSignedImageURL(index.featured[i].image, "w=1024&h=1024&fit=crop&crop=entropy&q=40");
+      }
+      res.render('index.html', { index: index, userInfo: req.userInfo });
+    },
     reason => {
       log.error(["index", reason]);
       res.sendStatus(500);

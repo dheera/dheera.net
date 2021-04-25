@@ -4,7 +4,7 @@
 
 <br>
 <div class="front-features">
-  <div class="front-feature-big" style="background-image:url(https://dheera.imgix.net/photos/calnight/20210119-seagull-nebula-pinnacles-national-park.jpg?w=2048&h=2048&fit=fillmax&mark=/photos/_watermark/512.png&mark-w=200&mark-align=bottom,left&mark-pad=50&q=95&s=be713e64818bc1980f368c87b07d9ebe);">
+  <div class="front-feature-big" style="background-image:url({{ index.featured[0].backgroundImageURL }};">
     <a href="{{ index.featured[0].url }}">
       <div class="text">
         <div class="title">{{ index.featured[0].title }}&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div>
@@ -13,7 +13,7 @@
     </a>
   </div>
   <div class="front-features-small">
-    <div class="front-feature-small">
+    <div class="front-feature-small" style="background-image:url({{ index.featured[1].backgroundImageURL }};">
       <a href="{{ index.featured[1].url }}">
         <div class="text">
           <div class="title">{{ index.featured[1].title }}&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div>
@@ -21,7 +21,7 @@
         </div>
       </a>
     </div>
-    <div class="front-feature-small">
+    <div class="front-feature-small" style="background-image:url({{ index.featured[2].backgroundImageURL }};">
       <a href="{{ index.featured[2].url }}">
         <div class="text">
           <div class="title">{{ index.featured[2].title }}&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div>
@@ -29,7 +29,7 @@
         </div>
       </a>
     </div>
-    <div class="front-feature-small">
+    <div class="front-feature-small" style="background-image:url({{ index.featured[3].backgroundImageURL }};">
       <a href="{{ index.featured[3].url }}">
         <div class="text">
           <div class="title">{{ index.featured[3].title }}&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div>
