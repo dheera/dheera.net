@@ -2,15 +2,17 @@
 
 {% block content %}
 
-<h1 class="title">{{ title }}</h1>
-
-<div class="description">{{ description|safe }}</div>
+<div class="photo-content">
+  <h1 class="title">{{ title }}</h1>
+  <div class="markup-content description">{{ description|safe }}</div>
 
 {% if license == "cc-by-sa-4.0" %}
   <div class="license">[!en:License|zh:授權條款!]: <a href="[!https://creativecommons.org/licenses/by-sa/4.0/|zh:https://creativecommons.org/licenses/by-sa/4.0/deed.zh_TW!]">CC-BY-SA-4.0</a></div>
 {% elif license == "cc-by-nc-nd-4.0" %}
   <div class="license">[!en:License|zh:授權條款!]: <a href="[!https://creativecommons.org/licenses/by-nc-nd/4.0/|zh:https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh_TW!]">CC-BY-NC-ND 4.0</a></div>
 {% endif %}
+
+</div>
 
 <div class="photo-grid">
 {% for image in images %}<a href="{{image.src}}" data-size="600x400"><img src="{{image.thumbnail}}"></a>{% endfor %}

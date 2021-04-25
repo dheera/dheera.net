@@ -1,5 +1,58 @@
 /* ******** FONTS ******** */
 
+/* crimson-text-regular - latin */
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/crimson-text-v11-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/crimson-text-v11-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/crimson-text-v11-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/crimson-text-v11-latin-regular.svg#CrimsonText') format('svg'); /* Legacy iOS */
+}
+/* crimson-text-italic - latin */
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: italic;
+  font-weight: 400;
+  src: url('../fonts/crimson-text-v11-latin-italic.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/crimson-text-v11-latin-italic.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/crimson-text-v11-latin-italic.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-italic.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-italic.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/crimson-text-v11-latin-italic.svg#CrimsonText') format('svg'); /* Legacy iOS */
+}
+/* crimson-text-600 - latin */
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/crimson-text-v11-latin-600.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/crimson-text-v11-latin-600.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/crimson-text-v11-latin-600.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-600.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-600.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/crimson-text-v11-latin-600.svg#CrimsonText') format('svg'); /* Legacy iOS */
+}
+/* crimson-text-700 - latin */
+@font-face {
+  font-family: 'Crimson Text';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/crimson-text-v11-latin-700.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('../fonts/crimson-text-v11-latin-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/crimson-text-v11-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-700.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/crimson-text-v11-latin-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/crimson-text-v11-latin-700.svg#CrimsonText') format('svg'); /* Legacy iOS */
+}
+
 @font-face {
   font-family: 'Saira Semi Condensed';
   font-style: normal;
@@ -56,6 +109,7 @@ i:not(.fas):not(.fab) {margin-left:.15em;margin-right:.1em;} /* fix for Saira Se
 h1, h2, h3, h4, h5 {
     color:#ffffff;
     font-weight:300;
+    font-family:'Saira Semi Condensed', sans-serif;
 }
 
 .light h1, .light h2, .light h3, .light h4, .light h5 {
@@ -162,6 +216,7 @@ a:visited {
   width:calc( 100% - 40pt );
   height:25pt;
   color:#606060;
+  line-height:1.5em;
 }
 
 .light .navbar-mobile {
@@ -567,7 +622,15 @@ a:visited {
 /* ******** MARKUP ******** */
 
 .markup-content {
+  font-family:'Crimson Text', 'AR PL UMing TW', 'Microsoft YaHei New', 'Microsoft YaHei', 'STXihei', 'KaiTi', 'STKaiti', Serif;
+  font-weight:400;
+  font-size:18pt;
+}
 
+@media only screen and (max-width: 899px) {
+  .markup-content {
+    font-size:16pt;
+  }
 }
 
 .markup-content img {
@@ -587,20 +650,33 @@ a:visited {
 
 .markup-content .code {
   font-family:monospace;
+  font-size:14pt;
   white-space:nowrap;
   background:#303030;
   color:#c0c0c0;
   border:4pt solid #303030;
 }
 
+@media only screen and (max-width: 899px) {
+  .markup-content .code {
+    font-size:12pt;
+  }
+}
+
 .light .markup-content .code {
-  background:#c0c0c0;
+  background:#e0e0e0;
   color:#303030;
-  border:4pt solid #c0c0c0;
+  border:4pt solid #e0e0e0;
 }
 
 .post-content {
   max-width:600pt;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.photo-content {
+  max-width:800pt;
   margin-left:auto;
   margin-right:auto;
 }
