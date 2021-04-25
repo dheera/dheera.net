@@ -238,3 +238,18 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
 // execute above function
 // initPhotoSwipeFromDOM('.my-gallery');
+//
+
+window.onload = () => {
+  if(document.getElementsByClassName('photo-content')[0].offsetHeight > 350) collapsePhotoContent();
+};
+
+let collapsePhotoContent = () => {
+  document.getElementsByClassName('photo-content')[0].classList.add('collapsed');
+  document.getElementsByClassName('photo-content-expand')[0].classList.add('collapsed');
+}
+
+let expandPhotoContent = () => {
+  document.getElementsByClassName('photo-content')[0].classList.remove('collapsed');
+  document.getElementsByClassName('photo-content-expand')[0].classList.remove('collapsed');
+}

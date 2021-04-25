@@ -2,18 +2,23 @@
 
 {% block content %}
 
-<h1>Posts</h1>
+<div class="post-content">
+  <div class="markup-content">
+  <h1>Posts</h1>
 
-I intend to write more blog posts in the future, hence this section. Excuse the emptiness for now!
+  I intend to write more blog posts in the future, hence this section. Excuse the emptiness for now!
 
-<br><br>
+  <br><br>
+  
+  {% for post in posts %} 
+  <a href="/posts/{{post.name}}/"><b>{{post.title}}</b></a> <span style="opacity:0.4;font-size:75%;">{{post.date}}</span><br>
+  {{post.subtitle}}<br>
+  <br>
+  <br>
 
-{% for post in posts %} 
-<a href="/posts/{{post.name}}/"><b>{{post.title}}</b></a> <small><i>{{post.date}}</i></small><br>
-{{post.subtitle}}<br>
-<br>
-<br>
+  {% endfor %}
 
-{% endfor %}
+  </div>
+</div>
 
 {% endblock %}

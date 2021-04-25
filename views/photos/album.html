@@ -13,6 +13,7 @@
 {% endif %}
 
 </div>
+<div class="photo-content-expand" onclick="expandPhotoContent();">[!en:More|zh:往下閱讀!]</div>
 
 <div class="photo-grid">
 {% for image in images %}<a href="{{image.src}}" data-size="600x400"><img src="{{image.thumbnail}}"></a>{% endfor %}

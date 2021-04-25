@@ -1,5 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>hello world</h1>
+
+<br>
+<div class="front-features">
+  <div class="front-feature-big">
+      <div class="text">
+        <div class="title">California by Night</div>
+        <div class="subtitle">The night landscapes that the human eye cannot see</div>
+      </div>
+  </div>
+  <div class="front-features-small">
+    <div class="front-feature-small">
+      <div class="text">
+        <div class="title">ROSshow</div>
+        <div class="subtitle">Visualize ROS data with ASCII art</div>
+      </div>
+    </div>
+    <div class="front-feature-small">
+      <div class="text">
+        <div class="title">Land of Fire and Ice</div>
+        <div class="subtitle">Shooting High-Res Thermal Photos of Iceland to Show Nature at Work</div>
+      </div>
+    </div>
+    <div class="front-feature-small">
+      <div class="text">
+        <div class="title">Luxo</div>
+        <div class="subtitle">A robotic Pixar lamp that actually jumps</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="front-buttons">
+  <a href="/posts"><div class="front-button"><div>Posts&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div></div></a>
+  <a href="/projects"><div class="front-button"><div>Projects&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div></div></a>
+  <a href="/photos"><div class="front-button"><div>Photography&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></div></div></a>
+</div>
+
 {% endblock %}

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>hello world</h1>
+  <div class="post-content">
+  <div class="markup-content">
 
-  <img src="/images/profile-camera.jpg" class="img-float-right" style="width:300pt;height:300pt;">
+  <h1>hello world</h1>
 
   <p>[!en:Hi, I'm Dheera Venkatraman.|zh:哈嘍，我是Dheera。!]
 
@@ -16,6 +17,9 @@
   [!en:Before that, I completed my Ph.D. at the <a href="https://www.rle.mit.edu/qoptics/people/">Optical and Quantum Communications Group</a> at MIT, where I led the experimental implementation of a <a href="https://science.sciencemag.org/content/343/6166/58">single-photon 3D camera/LIDAR</a>, among other optics work. I come from a strong physics background and tend to attack most problems from first principles, and have lots of side projects in imaging, robotics, and photography. I have strong interests in promoting the use of robotics for greater good, including safety, convenience, and sustainability.|zh:博士研究是在麻省理工學院連讀的<a href="https://www.rle.mit.edu/qoptics/people/">量子通訊組</a>，主要負責一種新的<a href="https://science.sciencemag.org/content/343/6166/58">單光子激光雷達</a>的實際實驗，之前也在MIT攻讀物理與電子工程的雙專業。!]
   </p>
 
+  <div style="max-height:400pt;overflow:hidden;">
+  <img src="/images/profile-camera.jpg">
+  </div>
 
   {% if not userInfo.groups.aa %}
 
@@ -42,5 +46,8 @@
   I used to volunteer frequently with the <a href="https://www.tzuchi.org.tw/">Tzu Chi Foundation</a>, including a disaster relief trips to Haiti, was on the founding team of the <a href="https://www.mitchief.org/">MIT-China Innovation and Entrepereneurship Forum</a>, and was a Marketing/Technical director of the <a href="http://sustainabilitysummit.mit.edu/">MIT Sustainability Summit</a> for many years. Currently I'm focused on my career and have put volunteer work on hold, but hope to return to it at some point in the future. My thoughts may change at some point, but I would like to think of better ways to use technology to better scale impact for social good, as human volunteer labor can only scale so much.
 
   {% endif %}
+
+  </div>
+  </div>
 
 {% endblock %}
