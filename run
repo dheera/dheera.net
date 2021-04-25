@@ -1,2 +1,5 @@
 #!/bin/bash
-npx nodemon
+# npx nodemon
+
+cd "$(dirname "$0")"
+npx nodemon -x 'node index.js || touch index.js'
