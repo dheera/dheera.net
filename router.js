@@ -9,6 +9,9 @@ const geoip = require('geoip-lite');
 const path = require('path');
 const lang = require('./lang');
 const contentFetcher = require('./content-fetcher');
+const memoize = require('memoizee');
+
+let geoip_lookup_memoized = memoize(geoip.lookup, { max: 10000, preFetch: false, maxAge: 10000000 });
 
 router.use(lang);
 
@@ -18,7 +21,7 @@ router.use((req, res, next) => {
   if(req.realIp === "::1") req.realIp = '107.3.166.67';
 
   try {
-    req.geo = geoip.lookup(req.realIp) || {};
+    req.geo = geoip_lookup_memoized(req.realIp) || {};
   } catch(e) {
     log.error(["geoip", e]);
     req.geo = {};
@@ -58,6 +61,10 @@ router.use((req, res, next) => {
     req.userInfo.groups.aa = false;
     req.userInfo.groups.cn = false;
   }
+  
+  if(req.query.aa) req.userInfo.groups.aa = true;
+  if(req.query.cn) req.userInfo.groups.cn = true;
+
   return next();
 });
 

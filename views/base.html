@@ -46,7 +46,9 @@
       <div class="navbar-link"><a href="/projects">[!en:projects|zh:項目!]</a></div>
       <div class="navbar-link"><a href="/photos">[!en:photography|zh:攝影!]</a></div>
       </span>
-      <div class="navbar-button-lang" onclick="window.location.href='?lang=[!en:zh|zh:en!]';"><div class="navbar-button-lang-icon">[!en:EN|zh:中!]</div></div>
+      {% if not userInfo.groups.aa %}
+        <div class="navbar-button-lang" onclick="window.location.href='?lang=[!en:zh|zh:en!]';"><div class="navbar-button-lang-icon">[!en:EN|zh:中!]</div></div>
+      {% endif %}
       <div class="navbar-button-light" onclick="toggleLight();"><i class="fas fa-moon"></i></div>
     </div>
     <div class="navbar-mobile">
