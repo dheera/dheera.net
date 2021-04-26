@@ -21,6 +21,7 @@
 // This works by hijacking res.write and res.send, so it will work fine with templating frameworks like Nunjucks.
 
 const acceptLanguageParser = require('accept-language-parser');
+const memoize = require('memoizee');
 
 let filtered = (content, acceptLanguage) => {
   if(typeof(content) !== "string") return content; // binary data just passes through
@@ -45,6 +46,8 @@ let filtered = (content, acceptLanguage) => {
   });
 };
 
+let filtered_memoized = memoize(filtered, { maxAge: 60, max: 10000 });
+
 let lang = (req, res, next) => {
 
   res.write_ = res.write;
@@ -54,14 +57,14 @@ let lang = (req, res, next) => {
     let acceptLanguage = req.headers["accept-language"];
     if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang); }
     else if(req.cookies.lang) { acceptLanguage = req.cookies.lang; }
-    res.write_(filtered(content, acceptLanguage));
+    res.write_(filtered_memoized(content, acceptLanguage));
   };
 
   res.send = (content) => {
     let acceptLanguage = req.headers["accept-language"];
     if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang); }
     else if(req.cookies.lang) { acceptLanguage = req.cookies.lang; }
-    res.send_(filtered(content, acceptLanguage));
+    res.send_(filtered_memoized(content, acceptLanguage));
   };
 
   return next();

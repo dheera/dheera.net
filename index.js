@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const express = require('express');
-const minifyHTML = require('express-minify-html');
+const minifyHTML = require('express-minify-html-2');
 const nunjucks = require('nunjucks');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
