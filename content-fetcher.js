@@ -92,14 +92,20 @@ let getProject = (projectName) => new Promise((resolve, reject) => {
 
             body = body.replace(/src="(.*?)"/g, 'src="' + baseUrl + "$1" + '"');
 
+	    index.ctime = index.ctime || "00000000";
+            index.mtime = index.mtime || "00000000";
+
             resolve({
 		_type: "project",
 		name: projectName,
-		classes: index.classes ? index.classes : "",
 		url: "/" + config_projects.prefix + projectName + "/",
                 title: index.title || "",
                 subtitle: index.subtitle || "",
                 image: index.image ? (config_projects.prefix + projectName + "/" + index.image) : "",
+                ctime: index.ctime || "00000000",
+                mtime: index.mtime || "00000000",
+		classes: index.classes ? index.classes : "",
+		dateStr: index.mtime.substr(0,4) + "-" + index.mtime.substr(4, 2) + "-" + index.mtime.substr(6, 2),
                 body: body,
             });
         },
@@ -164,18 +170,25 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
                      imageFiles.push(filename);
                  }
             }
+
+            index.ctime = index.ctime || "00000000";
+            index.mtime = index.mtime || "00000000";
+
             resolve({
 		_type: "album",
 		name: albumName,
-		classes: index.classes ? index.classes : "",
 		url: "/" + config_photos.prefix + albumName + "/",
-                image: index.image ? (config_photos.prefix + albumName + "/" + index.image) : imageFiles[0],
-                imageFiles: imageFiles || [],
                 title: index.title || "",
                 subtitle: index.subtitle || "",
+                ctime: index.ctime || "00000000",
+                mtime: index.mtime || "00000000",
+                image: index.image ? (config_photos.prefix + albumName + "/" + index.image) : imageFiles[0],
+		classes: index.classes ? index.classes : "",
+                imageFiles: imageFiles || [],
                 license: index.license || "",
                 description: (index.description || "").replace(/\n/gs, "<br>"),
                 thumbAspectRatio: index.thumbAspectRatio || 1.0,
+		dateStr: index.mtime.substr(0,4) + "-" + index.mtime.substr(4, 2) + "-" + index.mtime.substr(6, 2),
             });
         },
         reason => reject(reason)
@@ -228,6 +241,9 @@ let getPost = (postName) => new Promise((resolve, reject) => {
             let baseUrl = "https://" + config_posts.domain + "/" + config_posts.prefix + postName + "/";
 
             body = body.replace(/src="(.*?)"/g, 'src="' + baseUrl + "$1" + '"');
+            
+	    index.ctime = index.ctime || "00000000";
+            index.mtime = index.mtime || "00000000";
 
             resolve({
 		_type: "post",
@@ -236,8 +252,10 @@ let getPost = (postName) => new Promise((resolve, reject) => {
 		url: "/" + config_posts.prefix + postName + "/",
                 title: index.title || "",
                 subtitle: index.subtitle || "",
+                ctime: index.ctime || postName.substr(0,8),
+                mtime: index.mtime || postName.substr(0,8),
                 image: index.image ? (config_posts.prefix + postName + "/" + index.image) : "",
-		date: postName.substr(0,4) + "-" + postName.substr(4, 2) + "-" + postName.substr(6, 2),
+		dateStr: postName.substr(0,4) + "-" + postName.substr(4, 2) + "-" + postName.substr(6, 2),
                 body: body,
             });
         },

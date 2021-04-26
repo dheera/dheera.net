@@ -22,6 +22,9 @@ router.get('/', (req, res) => {
             else projectsUnfeatured.push(projects[i]);
         }
 
+        projectsFeatured.sort((a, b) => parseInt(b.mtime - a.mtime));
+        projectsUnfeatured.sort((a, b) => parseInt(b.mtime - a.mtime));
+
         res.render("projects/index.html", { projectsFeatured: projectsFeatured, projectsUnfeatured: projectsUnfeatured, userInfo : req.userInfo });
     }, reason => {
         log.error(["projects_index", reason]);

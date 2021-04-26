@@ -448,6 +448,7 @@ a:visited {
   position:absolute;
   top:0;left:0;z-index:0;
   width:100%;height:100%;
+  background-color:rgba(0,0,0,0.4);
   -webkit-backdrop-filter: blur(5px);
   -moz-backdrop-filter: blur(5px);
   -ms-backdrop-filter: blur(5px);
@@ -489,26 +490,26 @@ a:visited {
   align-items:center;
   color:#ffffff;
   text-decoration:none;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:top center;
 }
 
 .front-feature-small:nth-child(1) {
   position:absolute;
   top:0;
-  background:#503040;
   height:calc(33.33333333333333% - 3pt);
 }
 
 .front-feature-small:nth-child(2) {
   position:absolute;
   top:33.3333333333333333%;
-  background:#403050;
   height:calc(33.33333333333333% - 3pt);
 }
 
 .front-feature-small:nth-child(3) {
   position:absolute;
   top:66.666666666666666%;
-  background:#305040;
   height:33.33333333333333%;
 }
 
@@ -630,6 +631,9 @@ a:visited {
   width:calc( 33.333333333333333% - 4pt );
   height:400pt;
   overflow:hidden;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center center;
 }
 
 .album-grid-unfeatured .album {
@@ -640,6 +644,9 @@ a:visited {
   width:calc( 33.333333333333333% - 4pt );
   height:200pt;
   overflow:hidden;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center center;
 }
 
 @media only screen and (max-width: 899px) {
@@ -799,6 +806,14 @@ a:visited {
   display:block;
 }
 
+.markup-content .caption {
+  margin-top:-20pt;
+  margin-bottom:40pt;
+  font-style:italic;
+  font-size:smaller;
+  text-align:center;
+}
+
 /*@media only screen and (min-width: 1100px) {
   .markup-content img {
     max-width:70%;
@@ -825,6 +840,26 @@ a:visited {
   color:#303030;
   border:4pt solid #e0e0e0;
 }
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+  margin-top:10pt;
+  margin-bottom:10pt;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ******** ******** */
 
 .post-content {
   max-width:600pt;

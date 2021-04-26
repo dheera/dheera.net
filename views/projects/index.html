@@ -19,11 +19,10 @@
 <div class="album-grid-unfeatured">
     {% for project in projectsUnfeatured %}
     <a href="/projects/{{project.name}}/">
-    <div class="album">
+    <div class="album" style="background-image:url({{project.thumbnail}});">
         <div class="album-text">
 	  <div class="album-title">{{project.title}}</div>
         </div>
-	<img src="{{project.thumbnail}}">
     </div>
     </a>
     {% endfor %}
