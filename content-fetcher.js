@@ -186,6 +186,7 @@ let getAlbum = (albumName) => new Promise((resolve, reject) => {
 		classes: index.classes ? index.classes : "",
                 imageFiles: imageFiles || [],
                 license: index.license || "",
+		watermark: index.watermark,
                 description: (index.description || "").replace(/\n/gs, "<br>"),
                 thumbAspectRatio: index.thumbAspectRatio || 1.0,
 		dateStr: index.mtime.substr(0,4) + "-" + index.mtime.substr(4, 2) + "-" + index.mtime.substr(6, 2),
