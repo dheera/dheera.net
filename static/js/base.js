@@ -60,7 +60,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
                 src: linkEl.getAttribute('href'),
                 w: parseInt(size[0], 10),
                 h: parseInt(size[1], 10),
-	//	autoSize: true,
+		autoSize: true,
             };
 		console.log(item);
 
