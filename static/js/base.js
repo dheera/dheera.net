@@ -54,14 +54,15 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
                 continue;
             }
 
-            let size = defaultImageSize;
+            let size = defaultImageSize.split("x");
 
             let item = {
                 src: linkEl.getAttribute('href'),
                 w: parseInt(size[0], 10),
                 h: parseInt(size[1], 10),
-		autoSize: true,
+	//	autoSize: true,
             };
+		console.log(item);
 
             if(linkEl.children.length > 1) {
                 item.title = "caption";
