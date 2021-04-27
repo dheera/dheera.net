@@ -62,7 +62,6 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
                 h: parseInt(size[1], 10),
 		autoSize: true,
             };
-		console.log(item);
 
             if(linkEl.children.length > 1) {
                 item.title = "caption";
