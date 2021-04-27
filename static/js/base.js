@@ -48,29 +48,22 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
         for(var i = 0; i < numNodes; i++) {
 
-            figureEl = thumbElements[i]; // <figure> element
+            linkEl = thumbElements[i]; // <a> element
 
-            // include only element nodes
-            if(figureEl.nodeType !== 1) {
+            if(linkEl.nodeType !== 1) {
                 continue;
             }
 
-            linkEl = figureEl.children[0]; // <a> element
+            size = "512x512".split('x');
 
-            size = linkEl.getAttribute('data-size').split('x');
-
-            // create slide object
             item = {
                 src: linkEl.getAttribute('href'),
                 w: parseInt(size[0], 10),
                 h: parseInt(size[1], 10)
             };
 
-
-
-            if(figureEl.children.length > 1) {
-                // <figcaption> content
-                item.title = figureEl.children[1].innerHTML;
+            if(linkEl.children.length > 1) {
+                item.title = "caption";
             }
 
             if(linkEl.children.length > 0) {
@@ -78,10 +71,10 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
                 item.msrc = linkEl.children[0].getAttribute('src');
             }
 
-            item.el = figureEl; // save link to element for getThumbBoundsFn
+            item.el = linkEl; // save link to element for getThumbBoundsFn
             items.push(item);
         }
-
+	console.log(items);
         return items;
     };
 
@@ -99,7 +92,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
         // find root element of slide
         var clickedListItem = closest(eTarget, function(el) {
-            return (el.tagName && el.tagName.toUpperCase() === 'FIGURE');
+            return (el.tagName && el.tagName.toUpperCase() === 'A');
         });
 
         if(!clickedListItem) {
@@ -125,7 +118,6 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
             }
             nodeIndex++;
         }
-
 
 
         if(index >= 0) {
@@ -175,7 +167,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
         options = {
 
             // define gallery index (for URL)
-            galleryUID: galleryElement.getAttribute('data-pswp-uid'),
+            galleryUID: galleryElement.getAttribute('data-uid'),
 
             getThumbBoundsFn: function(index) {
                 // See Options -> getThumbBoundsFn section of documentation for more info
@@ -223,9 +215,9 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
     // loop through all gallery elements and bind events
     var galleryElements = document.querySelectorAll( gallerySelector );
-
+    console.log(galleryElements);
     for(var i = 0, l = galleryElements.length; i < l; i++) {
-        galleryElements[i].setAttribute('data-pswp-uid', i+1);
+        galleryElements[i].setAttribute('data-uid', i+1);
         galleryElements[i].onclick = onThumbnailsClick;
     }
 
@@ -237,11 +229,12 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 };
 
 // execute above function
-// initPhotoSwipeFromDOM('.my-gallery');
 //
 
 window.onload = () => {
   if(document.getElementsByClassName('photo-content')[0].offsetHeight > 350) collapsePhotoContent();
+
+  initPhotoSwipeFromDOM('.photo-grid');
 };
 
 let collapsePhotoContent = () => {
