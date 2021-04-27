@@ -33,6 +33,7 @@ let toggleLight = () => {
   window.localStorage.setItem("light", document.body.classList.contains("light"));
 }
 
+// adapted from https://photoswipe.com/documentation/getting-started.html
 var initPhotoSwipeFromDOM = function(gallerySelector) {
 
     // parse slide data (url, title, size ...) from DOM elements
