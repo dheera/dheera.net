@@ -46,7 +46,7 @@ router.get('/:albumName', (req, res) => {
             for (i in album.imageFiles) {
                 images.push({
                     path: album.imageFiles[i],
-                    thumbnail: contentFetcher.getSignedImageURL(album.imageFiles[i], "w=300&h=" + Math.floor(album.thumbAspectRatio * 300) + "&fit=crop&q=50"),
+                    thumbnail: contentFetcher.getSignedImageURL(album.imageFiles[i], "w=300&h=300&fit=crop&q=50"),
                     src: album.noWatermark ? contentFetcher.getSignedImageURL(album.imageFiles[i], "w=2048&h=2048&fit=fillmax&q=90") : contentFetcher.getSignedImageURL(album.imageFiles[i], "w=2048&h=2048&fit=fillmax&mark=/photos/_watermark/512.png&mark-w=200&mark-align=bottom,left&mark-pad=50&q=95"),
                     srcInfo: contentFetcher.getSignedImageURL(album.imageFiles[i], "fm=json"),
                 });

@@ -54,12 +54,13 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
                 continue;
             }
 
-            size = "512x512".split('x');
+            size = "1024x1024".split('x');
 
             item = {
                 src: linkEl.getAttribute('href'),
                 w: parseInt(size[0], 10),
-                h: parseInt(size[1], 10)
+                h: parseInt(size[1], 10),
+		autoSize: true,
             };
 
             if(linkEl.children.length > 1) {
