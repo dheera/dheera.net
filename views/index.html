@@ -44,7 +44,9 @@
 </div>
 
 <div class="front-buttons">
+  {% if not userInfo.groups.aa %}
   <a href="/posts"><div class="front-button"><div>[!en:Posts|zh:帖文!]&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div></div></a>
+  {% endif %}
   <a href="/projects"><div class="front-button"><div>[!en:Projects|zh:項目!]&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></i></div></div></a>
   <a href="/photos"><div class="front-button"><div>[!en:Photography|zh:攝影!]&nbsp;&nbsp;&nbsp;<i class="fas fa-chevron-right"></div></div></a>
 </div>
