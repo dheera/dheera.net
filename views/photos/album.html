@@ -21,6 +21,29 @@
 
 <script>
 let images = {{ images | safe }};
+let defaultImageSize = "1024x1024";
+onLoad.push(() => {
+  initPhotoSwipeFromDOM('.photo-grid')
+  if(document.getElementsByClassName('photo-content')[0].offsetHeight > 350) collapsePhotoContent();
+
+  let url = images[0].srcInfo;
+  let xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      try {
+        let imageInfo = JSON.parse(xhttp.responseText);
+        if(imageInfo.PixelWidth && imageInfo.PixelHeight) {
+          defaultImageSize = Math.floor(imageInfo.PixelWidth/4) + "x" + Math.floor(imageInfo.PixelHeight/4);
+	}
+      } catch(e) {
+        console.log("error parsing response", xhttp.responseText);
+      }
+    }
+  };
+  xhttp.open("GET", url, true);
+  xhttp.send();
+	console.log(url);
+});
 </script>
 
 {% endblock %}

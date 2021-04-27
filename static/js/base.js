@@ -48,15 +48,15 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
         for(var i = 0; i < numNodes; i++) {
 
-            linkEl = thumbElements[i]; // <a> element
+            let linkEl = thumbElements[i]; // <a> element
 
             if(linkEl.nodeType !== 1) {
                 continue;
             }
 
-            size = "1024x1024".split('x');
+            let size = defaultImageSize;
 
-            item = {
+            let item = {
                 src: linkEl.getAttribute('href'),
                 w: parseInt(size[0], 10),
                 h: parseInt(size[1], 10),
@@ -75,7 +75,6 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
             item.el = linkEl; // save link to element for getThumbBoundsFn
             items.push(item);
         }
-	console.log(items);
         return items;
     };
 
@@ -216,7 +215,6 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
     // loop through all gallery elements and bind events
     var galleryElements = document.querySelectorAll( gallerySelector );
-    console.log(galleryElements);
     for(var i = 0, l = galleryElements.length; i < l; i++) {
         galleryElements[i].setAttribute('data-uid', i+1);
         galleryElements[i].onclick = onThumbnailsClick;
@@ -229,13 +227,12 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     }
 };
 
-// execute above function
-//
+let onLoad = [];
 
 window.onload = () => {
-  if(document.getElementsByClassName('photo-content')[0].offsetHeight > 350) collapsePhotoContent();
-
-  initPhotoSwipeFromDOM('.photo-grid');
+  for(i in onLoad) {
+    onLoad[i]();
+  }
 };
 
 let collapsePhotoContent = () => {
