@@ -1,5 +1,15 @@
 {% extends "../base.html" %}
 
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block meta %}
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description|safe }}">
+<meta property="og:image" content="{{ images[0].src }}">
+{% endblock %}
+
 {% block content %}
 
 <div class="photo-content">

@@ -1,5 +1,14 @@
 {% extends "../base.html" %}
 
+{% block title %}
+Projects
+{% endblock %}
+
+{% block meta %}
+<meta property="og:title" content="Projects | dheera.net">
+<meta property="og:image" content="{{ projectsFeatured[0].thumbnail }}">
+{% endblock %}
+
 {% block content %}
 
 <div class="album-grid-featured">

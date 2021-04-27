@@ -4,7 +4,7 @@
   <!-- FOUC prevention (reversed by the base.css stylesheet) -->
   <style>html{visibility: hidden;opacity:0;}</style>
 
-  <title>{% if title %}{% block title %}{% endblock %} | {% endif %}dheera.net | Dheera Venkatraman's web site</title>
+  <title>{% if title %}{% block title %}{% endblock %} | dheera.net{% else %}dheera.net | Dheera Venkatraman's web site{% endif %}</title>
 
   {% block meta %}{% endblock %}
 
