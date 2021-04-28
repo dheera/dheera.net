@@ -16,7 +16,11 @@ let geoip_lookup_memoized = memoize(geoip.lookup, { max: 10000, preFetch: false,
 router.use(lang);
 
 router.use((req, res, next) => {
+  // realIp gives real client's IP address even when app is run behind nginx or other forwarding proxy
   req.realIp = req.headers['x-forwarded-for'] || req.headers['x-real-ip'] || req.connection.remoteAddress;
+
+  // block FLoC
+  res.setHeader("Permissions-Policy", "interest-cohort=()");
 
   if(req.realIp === "::1") req.realIp = '107.3.166.67';
 
