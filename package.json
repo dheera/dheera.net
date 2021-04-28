@@ -12,6 +12,7 @@
     "express": "^4.17.1",
     "express-minify-html-2": "^1.0.1",
     "geoip-lite": "^1.4.2",
+    "helmet": "^4.5.0",
     "md5": "^2.3.0",
     "memoizee": "^0.4.15",
     "mkdirp-sync": "^0.0.3",

@@ -6,6 +6,7 @@ const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('./router');
+const helmet = require('helmet');
 
 
 var app = express();
@@ -17,6 +18,11 @@ nunjucks.configure('views', {
 });
 
 app.use(cookieParser());
+
+app.use(helmet.hidePoweredBy());
+app.use(helmet.noSniff());
+app.use(helmet.expectCt());
+app.use(helmet.frameguard());
 
 app.use(minifyHTML({
     override: true,
