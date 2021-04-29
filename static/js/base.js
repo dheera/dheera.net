@@ -80,6 +80,7 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 
             if(linkEl.children.length > 0) {
                 // <img> thumbnail element, retrieving thumbnail url
+                // item.msrc = linkEl.children[0].getAttribute('src');
                 item.msrc = linkEl.children[0].getAttribute('src');
             }
 
@@ -219,9 +220,13 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
             options.showAnimationDuration = 0;
         }
 
+	getUncroppedImage(items[index].msrc, 256, 400).then(function(dataUrl) {
+          items[index].msrc = dataUrl;
+          gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+          gallery.init();
+	});
+
         // Pass data to PhotoSwipe and initialize it
-        gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-        gallery.init();
     };
 
     // loop through all gallery elements and bind events
@@ -247,4 +252,22 @@ let collapsePhotoContent = function() {
 let expandPhotoContent = function() {
   document.getElementsByClassName('photo-content')[0].classList.remove('collapsed');
   document.getElementsByClassName('photo-content-expand')[0].classList.remove('collapsed');
+}
+
+let getUncroppedImage =  function(inputImageUrl, width, height) {
+  return new Promise(function(resolve, reject) {
+    let inputImage = new Image();
+    inputImage.crossOrigin="anonymous";
+    let outputImage = document.createElement('canvas');
+    outputImage.width = width;
+    outputImage.height = height;
+    inputImage.onload = function() {
+      let ctx = outputImage.getContext("2d");
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, outputImage.width, outputImage.height);
+      ctx.drawImage(inputImage, outputImage.width/2 - inputImage.naturalHeight/2, outputImage.height/2 - inputImage.naturalHeight/2);
+      resolve(outputImage.toDataURL());
+    }
+    inputImage.src = inputImageUrl;
+  });
 }
