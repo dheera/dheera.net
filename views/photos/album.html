@@ -32,7 +32,7 @@
 <script>
 let images = {{ images | safe }};
 let defaultImageSize = "1024x1024";
-onReady.push(() => {
+onReady.push(function() {
   initPhotoSwipeFromDOM('.photo-grid')
   if(document.getElementsByClassName('photo-content')[0].offsetHeight > 350) collapsePhotoContent();
 

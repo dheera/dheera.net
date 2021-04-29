@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   if(window.localStorage.getItem("light") === "true") {
     document.body.classList.add("light");
     document.querySelector('.navbar-button-light').querySelector('i').classList.add('fa-sun');
@@ -6,19 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-const debounce = (fn) => {
+const debounce = function(fn) {
   let frame;
-  return (...params) => {
+  return function(...params) {
     if (frame) { 
       cancelAnimationFrame(frame);
     }
-    frame = requestAnimationFrame(() => {
+    frame = requestAnimationFrame(function() {
       fn(...params);
     });
   } 
 };
 
-const storeScroll = () => {
+const storeScroll = function() {
   if(window.scrollY < 20) document.documentElement.dataset.scroll = 0;
   else document.documentElement.dataset.scroll = window.scrollY;
 }
@@ -26,7 +26,7 @@ const storeScroll = () => {
 document.addEventListener('scroll', debounce(storeScroll), { passive: true });
 storeScroll();
 
-let toggleLight = () => {
+let toggleLight = function() {
   document.body.classList.toggle("light");
   document.querySelector('.navbar-button-light').querySelector('i').classList.toggle('fa-moon');
   document.querySelector('.navbar-button-light').querySelector('i').classList.toggle('fa-sun');
@@ -231,15 +231,17 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 let onLoad = [];
 let onReady = [];
 
-window.onload = () => { for(i in onLoad) onLoad[i](); }
-document.addEventListener("DOMContentLoaded", () => { for(i in onReady) onReady[i](); });
+window.onload = function() { for(i in onLoad) onLoad[i](); }
+if(document.addEventListener) {
+  document.addEventListener("DOMContentLoaded", function() { for(i in onReady) onReady[i](); });
+}
 
-let collapsePhotoContent = () => {
+let collapsePhotoContent = function() {
   document.getElementsByClassName('photo-content')[0].classList.add('collapsed');
   document.getElementsByClassName('photo-content-expand')[0].classList.add('collapsed');
 }
 
-let expandPhotoContent = () => {
+let expandPhotoContent = function() {
   document.getElementsByClassName('photo-content')[0].classList.remove('collapsed');
   document.getElementsByClassName('photo-content-expand')[0].classList.remove('collapsed');
 }
