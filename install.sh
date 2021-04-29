@@ -2,7 +2,7 @@
 
 sudo apt update
 sudo apt install -y \
-  nginx \
+  nginx-extras \
   vim \
   screen \
   python3-pip \
