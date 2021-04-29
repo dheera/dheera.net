@@ -1,3 +1,4 @@
+const log = require('./log');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const config_aws = JSON.parse(fs.readFileSync('./config/aws.json', 'utf8'));

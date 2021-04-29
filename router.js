@@ -1,4 +1,4 @@
-const log = require('pino')({prettyPrint: true, level: 'debug'});
+const log = require('./log');
 const express = require('express');
 const router = express.Router();
 const routerPhotos = require('./router-photos');

@@ -3,11 +3,10 @@ const express = require('express');
 const minifyHTML = require('express-minify-html-2');
 const nunjucks = require('nunjucks');
 const fs = require('fs');
+const log = require('./log');
 const cookieParser = require('cookie-parser');
-const log = require('pino')({prettyPrint: true, level: 'debug'});
 const router = require('./router');
 const helmet = require('helmet');
-
 
 var app = express();
 var http = require('http').Server(app);

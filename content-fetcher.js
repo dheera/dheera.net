@@ -1,4 +1,4 @@
-const log = require('pino')({prettyPrint: true, level: 'debug'});
+const log = require('./log');
 const router = require('express').Router();
 const aws = require('./aws');
 const fs = require('fs');
