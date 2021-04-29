@@ -55,14 +55,14 @@ let lang = (req, res, next) => {
 
   res.write = (content) => {
     let acceptLanguage = req.headers["accept-language"];
-    if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang); }
+    if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang);return res.redirect(req.baseUrl + req.path); }
     else if(req.cookies.lang) { acceptLanguage = req.cookies.lang; }
     res.write_(filtered_memoized(content, acceptLanguage));
   };
 
   res.send = (content) => {
     let acceptLanguage = req.headers["accept-language"];
-    if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang); }
+    if(req.query.lang) { acceptLanguage = req.query.lang;res.cookie('lang', req.query.lang);return res.redirect(req.baseUrl + req.path); }
     else if(req.cookies.lang) { acceptLanguage = req.cookies.lang; }
     res.send_(filtered_memoized(content, acceptLanguage));
   };
