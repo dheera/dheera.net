@@ -1,4 +1,14 @@
-document.addEventListener('DOMContentLoaded', function() {
+let onLoad = [];
+let onReady = [];
+
+window.onload = function() { for(i in onLoad) onLoad[i](); }
+if(document.addEventListener) {
+  document.addEventListener("DOMContentLoaded", function() { for(i in onReady) onReady[i](); });
+} else if(document.attachEvent) {
+  document.attachEvent("onDOMContentLoaded", function() { for(i in onReady) onReady[i](); });
+}
+
+onReady.push(function() {
   if(window.localStorage.getItem("light") === "true") {
     document.body.classList.add("light");
     document.querySelector('.navbar-button-light').querySelector('i').classList.add('fa-sun');
@@ -228,13 +238,6 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
     }
 };
 
-let onLoad = [];
-let onReady = [];
-
-window.onload = function() { for(i in onLoad) onLoad[i](); }
-if(document.addEventListener) {
-  document.addEventListener("DOMContentLoaded", function() { for(i in onReady) onReady[i](); });
-}
 
 let collapsePhotoContent = function() {
   document.getElementsByClassName('photo-content')[0].classList.add('collapsed');
