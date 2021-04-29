@@ -229,12 +229,10 @@ var initPhotoSwipeFromDOM = function(gallerySelector) {
 };
 
 let onLoad = [];
+let onReady = [];
 
-window.onload = () => {
-  for(i in onLoad) {
-    onLoad[i]();
-  }
-};
+window.onload = () => { for(i in onLoad) onLoad[i](); }
+document.addEventListener("DOMContentLoaded", () => { for(i in onReady) onReady[i](); });
 
 let collapsePhotoContent = () => {
   document.getElementsByClassName('photo-content')[0].classList.add('collapsed');
