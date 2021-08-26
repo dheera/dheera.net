@@ -104,6 +104,9 @@ router.get('/api/headers', (req, res) => res.json(req.headers));
 router.get('/resume', (req, res) => res.redirect("https://d2ycs4ofblah20.cloudfront.net/files/dheera-venkatraman-resume.pdf"));
 router.get('/resume.pdf', (req, res) => res.redirect("https://d2ycs4ofblah20.cloudfront.net/files/dheera-venkatraman-resume.pdf"));
 
+router.get('/profile_code', (req, res) => res.redirect("https://d2ycs4ofblah20.cloudfront.net/files/profile_code.txt"));
+router.get('/profile_code.txt', (req, res) => res.redirect("https://d2ycs4ofblah20.cloudfront.net/files/profile_code.txt"));
+
 router.all('*', (req, res) => {
   res.sendStatus(404);
 });
