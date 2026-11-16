@@ -3,6 +3,7 @@ node_modules/
 .published/
 dist
 .dist-*
+.publish-config-*
 .publish-lock
 .deploy-lock
 .ec2-deploy-lock

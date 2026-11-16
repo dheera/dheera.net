@@ -5,7 +5,7 @@ import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { inventoryRelease } from './lib/deploy.mjs';
+import { inventoryRelease } from './lib/release-inventory.mjs';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 
@@ -34,14 +34,9 @@ async function run(command, args, { input, capture = false } = {}) {
   });
 }
 
-// The existing inventory validator is shared with S3: these inert labels satisfy
-// its metadata contract. This path never invokes the AWS CLI or uploads its manifest.
 export async function inventoryEC2Release(releaseDir, target) {
   validateEC2Target(target);
-  return inventoryRelease(releaseDir, {
-    bucket: 'ec2-static', region: 'not-used', profile: 'not-used', siteURL: target.siteURL,
-    cacheControl: 'public, max-age=60, s-maxage=60, must-revalidate, stale-if-error=0', invalidateCloudFront: false,
-  });
+  return inventoryRelease(releaseDir, { siteURL: target.siteURL });
 }
 
 export function remoteScript(action, payload) {
@@ -98,7 +93,7 @@ async function main() {
     identity: { type: 'string' }, 'dry-run': { type: 'boolean', default: false }, help: { type: 'boolean', default: false },
   } });
   if (values.help) {
-    console.log('Usage: npm run deploy:production -- [--dry-run] [--identity /path/to/ssh-key]\nBuilds saved NAS content, verifies a complete remote release, and atomically activates it. Dry run builds and inventories locally without contacting the server.');
+    console.log('Usage: npm run deploy -- [--dry-run] [--identity /path/to/ssh-key]\nBuilds saved NAS content, verifies a complete remote release, and atomically activates it. Dry run builds and inventories locally without contacting the server.');
     return;
   }
   const lockPath = path.join(root, '.ec2-deploy-lock');

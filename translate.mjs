@@ -9,7 +9,7 @@ let local = {};
 try { local = JSON.parse(await readFile(path.join(directory, 'publish.local.json'), 'utf8')); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
 const { values } = parseArgs({ options: {
-  source: { type: 'string', default: process.env.PUBLISH_SOURCE ?? local.source ?? path.join(directory, 'sample-library') },
+  source: { type: 'string' },
   translator: { type: 'string' }, seed: { type: 'string', multiple: true }, cache: { type: 'string' },
   status: { type: 'boolean', default: false }, 'accept-reviewed': { type: 'boolean', default: false }, 'accept-manual': { type: 'boolean', default: false },
   help: { type: 'boolean', default: false },
@@ -29,10 +29,12 @@ if (values.help) {
   console.log('Usage: node translate.mjs [--source /path/to/library] [--status] [--translator /path/to/executable] [--seed file.json ...] [--cache file.json] [--accept-reviewed]\nWithout --status, fills missing local .zh-Hant.md fields. Existing translations are never overwritten or deleted. --accept-reviewed acknowledges existing translations against the current English source without changing text. --status only reads files; it never calls a translator.');
 } else {
   try {
+    const source = values.source ?? process.env.PUBLISH_SOURCE ?? local.source;
+    if (typeof source !== 'string' || !source.trim()) throw new Error('Configure a content source with --source, PUBLISH_SOURCE, or source in publish.local.json.');
     const result = await translateLibrary({
-      sourceDir: path.resolve(values.source), statusOnly: values.status, acceptReviewed: values['accept-reviewed'] || values['accept-manual'],
+      sourceDir: path.resolve(source), statusOnly: values.status, acceptReviewed: values['accept-reviewed'] || values['accept-manual'],
       translatorCommand: values.translator ?? process.env.GALLERY_TRANSLATOR,
-      seedPath: values.seed ?? ['sample-translations.json', 'project-translations.json', 'starter-translations.json'].map(file => path.join(directory, file)),
+      seedPath: values.seed,
       cachePath: values.cache ?? path.join(directory, '.published', '.translation-cache.json'),
     });
     printReport(result);

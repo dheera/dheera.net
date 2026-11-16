@@ -2,23 +2,25 @@
 
 The editable source is `/stuff/publish`. Eleventy builds complete English and Traditional Chinese HTML pages. The theme lives separately from content preparation. Published pages need no application server or LLM; JavaScript only enhances the gallery viewer and presentation controls.
 
-Production runs directly on Nginx at `https://dheera.net`, on the existing EC2 instance. Source code lives at this repository's root; the former `prototype/` directory and legacy Node application have been retired. NAS content and server credentials remain outside Git.
+Production runs directly on Nginx at `https://dheera.net`, on the existing EC2 instance. Source code lives at this repository's root. NAS content and server credentials remain outside Git.
 
 ## Everyday workflow
 
 Run these commands from `/home/dheera/code/web/dheera.net`:
+
+The existing checkout is configured for `/stuff/publish` in ignored `publish.local.json`. On a fresh checkout, create that file with `{ "source": "/stuff/publish" }`, or set `PUBLISH_SOURCE`. There is no fallback sample library. To initialize a new empty library, run `npm run init-library -- --source /path/to/library`.
 
 ```sh
 npm run translate             # fill missing Chinese text into local files
 npm run translations:status   # list missing or outdated translations; read-only
 npm run publish               # build the saved content into a complete static site
 npm run preview               # serve the active build at http://localhost:4173
-npm run deploy:production     # build, upload, verify, and activate on dheera.net
+npm run deploy                # build, upload, verify, and activate on dheera.net
 ```
 
 `build` is an alias for the local `publish` command. Neither command invokes an LLM or uploads anything. Photo-only changes can go straight to `publish`. For a theme-only change, `npm run build:theme` reuses prepared content and does not read the NAS or reprocess images.
 
-`npm run deploy:production -- --dry-run` validates the production build without contacting the server. The production uploader verifies all uploaded file hashes before atomically changing the active release, and keeps the previous release for rollback. See [EC2 deployment](deployment/EC2.md) for configuration and recovery. The S3/CloudFront preview remains separate.
+`npm run deploy -- --dry-run` validates the production build without contacting the server. The production uploader verifies all uploaded file hashes before atomically changing the active release, and keeps the previous release for rollback. See [Deployment](DEPLOYMENT.md) for configuration and recovery. `npm run deploy:production` is an alias for the same EC2 deployment.
 
 Normal builds omit the design-preview toolbar and use `defaultStyle` from `site.md`. To temporarily include style comparison controls, run `npm run build:theme -- --design-preview` (or `npm run publish -- --design-preview`). Run `npm run publish` without that flag for the output you will deploy. The flag is per-build and is never remembered by later builds.
 
@@ -50,11 +52,11 @@ Normal builds omit the design-preview toolbar and use `defaultStyle` from `site.
       cover.png
 ```
 
-`site.md` owns the name, contact/profile links, homepage headline and introduction, and `defaultStyle` (`midnight`, `editorial`, or `museum`). `about.md` owns its title, Markdown body and optional source-relative `portrait` and `travelMap`. The source README has detailed authoring examples.
+`site.md` owns the name, contact/profile links, homepage headline and introduction, and `defaultStyle` (`midnight`, `editorial`, or `museum`). `about.md` owns its title, Markdown body and optional source-relative `portrait` and `travelMap`. Only the NAS library supplies site content; the repository contains no sample galleries or starter copy.
 
 `travelMap: assets/travel.geojson` adds the inline About map. Its GeoJSON FeatureCollection contains Point and LineString features with `id`, `name`, and `kind` properties. Edit this local data and publish; it is a saved snapshot, not a live Google embed. The original imported KML is retained as `assets/travel-source.kml`. Natural Earth land geometry is bundled locally; projection happens at build time and the browser enhances the static SVG with pan/zoom and place selection. Remove `travelMap` to omit the map.
 
-The five active galleries were migrated from the original S3 JPEGs on 2026-11-15: 267 images, 3.17 GB. The NAS originals retain their exact S3 bytes; `.imports/2026-11-15/originals.json` records hashes and source keys. Old web previews and Laos are under `archive/`, outside the published collections. Publishing generates public WebPs from the originals and does not copy the original JPEGs into `dist`.
+Publishing generates public WebPs from the NAS originals and does not copy original JPEGs into `dist`.
 
 Photo sidecars and every photo metadata field are optional. Add, replace, edit or delete images and run publish. Explicit numeric order comes first; ties and unordered photos use natural filename order. A stable `slug` keeps a gallery's URL unchanged when you rename its folder. A gallery can use `layout: grid` or `layout: exhibition`; captions can be short or long Markdown stories.
 
@@ -74,7 +76,7 @@ Translation review state records source hashes in `.translations/state.json`. It
 
 Only translated text belongs in Chinese sidecars. Media paths, filenames, ordering, slugs and layout configuration remain shared in the English source. Markdown link/image destinations and code are validated before generated translations are saved. An adapter failure or concurrent source edit aborts generation before file replacement. Each changed sidecar is saved atomically.
 
-The starter translations are materialized from existing seed data. Future text needs an LLM adapter or handwritten Chinese. Missing translations fall back to English and are reported by the build. Publishing never silently changes them.
+New text needs an LLM adapter or handwritten Chinese. Missing translations fall back to English and are reported by the build. Publishing never silently changes them.
 
 ### Optional OpenAI adapter
 
@@ -112,28 +114,19 @@ Change these files to redesign the site; no publishing logic or NAS content migr
 
 English pages use `/photos/deepscapes/`, `/projects/`, `/about/`; Chinese uses `/zh-hant/photos/deepscapes/`, `/zh-hant/projects/`, `/zh-hant/about/`. Each directory contains `index.html`. The preview redirects extensionless directory paths without a trailing slash to the slash form. Language switching links to the equivalent page. Both versions have full text, metadata, canonical URLs and reciprocal language annotations before any browser JavaScript executes.
 
-Photos, Projects and About appear in the top navigation; language selection lives in the footer. An explicit selection is remembered locally. A fresh visit to `/` uses the first supported language in the browser's ordered language preferences, mapping Chinese variants to Traditional Chinese. Existing deep links, internal navigation, and browser Back keep their own language. This is a browser enhancement; actual HTTP `Accept-Language` negotiation can be added at the CDN later. Without JavaScript, both language versions and their links still work.
+Photos, Projects and About appear in the top navigation; language selection lives in the footer. An explicit selection is remembered locally. A fresh visit to `/` uses the first supported language in the browser's ordered language preferences, mapping Chinese variants to Traditional Chinese. Existing deep links, internal navigation, and browser Back keep their own language. This is a browser enhancement; HTTP `Accept-Language` negotiation could be added to Nginx later. Without JavaScript, both language versions and their links still work.
 
 Set `siteURL` in ignored `publish.local.json`, or use `--site-url`, to change canonical/social/sitemap URLs. The default is `https://dheera.net`. Existing content uses the configured `source`, overridden by `--source` or `PUBLISH_SOURCE`.
 
-`deploy.config.json` records the user-supplied `preview` target: bucket `dheera-net`, region `us-west-2`, site URL `https://dk7lfbp0bsgga.cloudfront.net`, and AWS profile `dheera-site`. It contains no secrets. AWS credentials belong in `~/.aws/credentials` under `[dheera-site]`, with region settings in `~/.aws/config` under `[profile dheera-site]`. The uploader uses bucket-only access and one-minute cache headers; it makes no CloudFront API calls or DNS changes.
+`deployment/ec2.json` contains the deployment host, site URL and remote release directory. `npm run deploy` builds from the configured NAS library, transfers only public files over SSH/rsync, verifies their hashes and atomically activates the complete release. All public responses use a 60-second cache lifetime. The private build manifest is never uploaded.
 
-With the AWS CLI installed, run from this directory:
+The existing `/resume`, `/resume.pdf`, `/profile_code` and `/profile_code.txt` URLs redirect to files served on this same site. Their source files live in `public/files/` in the repository; replace a PDF or text file there and deploy to update it. The publisher includes these real public downloads in every release.
 
-```sh
-npm run deploy -- --target preview --dry-run
-npm run deploy -- --target preview
-```
-
-Both commands build fresh from the configured NAS library with the preview URL, using saved translations without calling an LLM. `--dry-run` reads remote deployment state but does not upload or delete anything. Normal deployment compares SHA-256 hashes against S3's `_deploy/current.json`, uploads changed media/assets before HTML, then deletes obsolete managed HTML. Old media and assets are retained indefinitely. Add `--force` to reupload all public files and reapply metadata. A local receipt is saved at `.published/deployments/preview/current.json`; the private build `manifest.json` is never uploaded. `npm run publish` remains local and does not consume deployment config.
-
-Use a single publishing checkout: the deployment lock is local, and uploads do not switch the whole site atomically. Keep shared CSS/JavaScript compatible with old and new pages during uploads. The first preview deployment on 2026-11-15 uploaded 856 public files plus two deployment records. All 47 HTTP checks passed through CloudFront, covering both languages, clean gallery URLs, assets, content types, one-minute cache headers and real 404 responses. Browser checks passed for homepage images, gallery navigation/lightbox, and switching languages. A repeat deployment dry run found zero changed files; CloudFront revalidated sampled HTML/CSS after 63 seconds. Mainland-China reachability remains untested. Bucket-only credentials cannot inspect the distribution's cache-policy configuration. S3's REST origin alone does not resolve `/photos/deepscapes/` to `index.html`; the hosting/CDN routing must supply that.
-
-See [DEPLOYMENT.md](DEPLOYMENT.md) for preview upload behavior and CloudFront setup.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for setup, publishing and rollback.
 
 ## Repository and credentials
 
-Commit source, theme files, tests and public deployment settings. Keep NAS originals/content, `.published/`, `dist`, local configuration, SSH keys, AWS credentials and environment files outside Git. Credentials are read from the existing standard AWS profile or local SSH key, never copied to the server's public directory.
+Commit source, theme files, tests and public deployment settings. Keep NAS originals/content, `.published/`, `dist`, local configuration, SSH keys, credentials and environment files outside Git. The SSH credential is read from the local private key, never copied to the server's public directory.
 
 Before committing, run `npm run check:secrets` to scan the exact staged blobs. `npm run check:secrets -- --all-tracked` scans the complete Git index. The check reports filenames and rule names without exposing matched values. Enable the repository pre-commit hook with `git config core.hooksPath .githooks`. Pattern scanning is a safeguard, not a guarantee; review the staged file list as well.
 

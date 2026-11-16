@@ -12,7 +12,7 @@ let local = {};
 try { local = JSON.parse(await readFile(path.join(dir, 'publish.local.json'), 'utf8')); }
 catch (error) { if (error.code !== 'ENOENT') throw error; }
 const { values } = parseArgs({ options: {
-  source: { type: 'string', default: process.env.PUBLISH_SOURCE ?? local.source ?? path.join(dir, 'sample-library') },
+  source: { type: 'string' },
   out: { type: 'string', default: path.join(dir, '.published') },
   init: { type: 'boolean', default: false },
   'allow-empty': { type: 'boolean', default: false },
@@ -25,7 +25,11 @@ if (values.help) {
   console.log('Usage: npm run publish -- [--source /path/to/publish] [--out path] [--allow-empty] [--theme-only] [--design-preview] [--site-url https://dheera.net]\nBuilds static HTML locally. Translation generation is separate: npm run translate. No network upload or LLM call happens during build.');
 } else {
   try {
-    const sourceDir = path.resolve(values.source);
+    const source = values.source ?? process.env.PUBLISH_SOURCE ?? local.source;
+    if ((!values['theme-only'] || values.init) && (typeof source !== 'string' || !source.trim())) {
+      throw new Error('Configure a content source with --source, PUBLISH_SOURCE, or source in publish.local.json.');
+    }
+    const sourceDir = typeof source === 'string' && source.trim() ? path.resolve(source) : undefined;
     if (values.init) {
       if (!(await stat(sourceDir)).isDirectory()) throw new Error('Source must be an existing directory.');
       const file = path.join(sourceDir, '.gallery-library');

@@ -6,7 +6,7 @@
   "scripts": {
     "init-library": "node init-library.mjs",
     "publish": "node publish.mjs",
-    "deploy": "node deploy.mjs",
+    "deploy": "node deploy-ec2.mjs",
     "dev": "node server.mjs",
     "test": "node --test",
     "build": "node publish.mjs",
