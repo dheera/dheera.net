@@ -62,7 +62,9 @@ EditionIDs GeoLite2-City
 DatabaseDirectory /var/lib/GeoIP
 ```
 
-The Ubuntu module package enables its dynamic-module loader; do not add a duplicate `load_module` line. Install the updater unit, make the first download, and then enable its timer:
+The Ubuntu module package enables its dynamic-module loader; do not add a duplicate `load_module` line. On this server, the unused legacy Perl module is disabled by renaming `/etc/nginx/modules-enabled/50-mod-http-perl.conf` to `50-mod-http-perl.conf.disabled`. Its Perl 5.30 interpreter crashed during an Nginx configuration reload; this static site has no Perl handlers. A full Nginx restart was used once to unload it. Keep it disabled when recreating this setup. Ordinary subsequent configuration changes use a tested graceful reload.
+
+Install the updater unit, make the first download, and then enable its timer:
 
 ```sh
 sudo install -o root -g root -m 644 deployment/geoipupdate.service /etc/systemd/system/dheera-geoipupdate.service
@@ -95,6 +97,8 @@ sudo nginx -t
 sudo systemctl reload nginx
 curl -sSI https://dheera.net/visibility.css
 ```
+
+Check `systemctl is-active nginx` and repeat the HTTPS check after several seconds; `nginx -t` alone cannot catch a module crash during reload.
 
 The response should be `200`, `Content-Type: text/css`, `Cache-Control: private, no-store`, and `X-Content-Type-Options: nosniff`, with no additional public cache header. A missing or unreadable initial database makes `nginx -t` fail; keep the running configuration in place until that is fixed. Subsequent database updates are picked up by the GeoIP2 module within five minutes of requests, without an Nginx reload. See the [GeoIP2 module's auto-reload behavior](https://github.com/leev/ngx_http_geoip2_module#autoreload-default-disabled).
 
