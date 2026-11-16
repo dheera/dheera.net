@@ -25,6 +25,7 @@ function git(...arguments_) {
 }
 
 const pathRules = [
+  ['maxmind-credential-file', /(?:^|\/)GeoIP\.conf$/i],
   ['credential-file', /(?:^|\/)(?:\.aws|\.ssh)(?:\/|$)|(?:^|\/)(?:\.iam_key|credentials|credentials\.json|config\.tar\.gz\.gpg)$|(?:^|\/)config\/(?:aws|imgix)\.json$/i],
   ['environment-file', /(?:^|\/)\.env(?:\..*)?$/i],
   ['private-key-file', /\.(?:key|pem|p12|pfx|jks|keystore)$/i],
@@ -33,6 +34,7 @@ const pathRules = [
 ];
 
 const contentRules = [
+  ['maxmind-license-key', /\bLicenseKey\s+([A-Za-z0-9_-]{16,})(?=\s|$)/gi],
   ['private-key', /-----BEGIN (?:RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY-----/g],
   ['aws-access-key', /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/g],
   ['github-token', /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{50,})\b/g],

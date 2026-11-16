@@ -18,6 +18,9 @@ async function fixture(t) {
     'sitemap.xml': '<urlset/>', 'robots.txt': 'User-agent: *',
     'media/abc-640.webp': 'image fixture', 'assets/site.js': 'console.log("hello")',
     'assets/styles.css': 'body { color: white; }', 'fonts/site.woff2': 'font fixture',
+    'visibility.css': '/* Normal fallback */',
+    'assets/visibility-normal.css': '/* Normal view */',
+    'assets/visibility-limited.css': '[data-visibility="about"] { display: none !important; }',
     'files/resume.pdf': '%PDF-public-file', 'files/profile_code.txt': 'Public profile code',
     'manifest.json': '{"sourceId":"private-local-build-model"}',
   };
@@ -32,11 +35,14 @@ async function fixture(t) {
 test('release inventory hashes only public files and excludes the private build model', async t => {
   const f = await fixture(t);
   const { manifest } = await inventoryRelease(f.releaseDir, target);
-  assert.equal(manifest.objects.length, 12);
+  assert.equal(manifest.objects.length, 15);
   assert.ok(!manifest.objects.some(file => file.key === 'manifest.json'));
   assert.doesNotMatch(JSON.stringify(manifest), /private-local-build-model|sourceId|\/tmp\//);
   assert.equal(manifest.objects.find(file => file.key === 'files/resume.pdf').contentType, 'application/pdf');
   assert.equal(manifest.objects.find(file => file.key === 'files/profile_code.txt').contentType, 'text/plain; charset=utf-8');
+  for (const key of ['visibility.css', 'assets/visibility-normal.css', 'assets/visibility-limited.css']) {
+    assert.equal(manifest.objects.find(file => file.key === key).contentType, 'text/css; charset=utf-8');
+  }
   assert.ok(manifest.objects.every(file => /^[a-f0-9]{64}$/.test(file.sha256)));
   await writeFile(path.join(f.releaseDir, 'assets/site.js'), 'changed script');
   const updated = (await inventoryRelease(f.releaseDir, target)).manifest;
@@ -53,6 +59,7 @@ test('release inventory refuses hidden files, unknown assets and nested public d
     ['files/script.js', /Unexpected public file/],
     ['assets/key.pem', /Unexpected public file/],
     ['private.txt', /Unexpected public file/],
+    ['other.css', /Unexpected public file/],
   ]) {
     const filename = path.join(f.releaseDir, name);
     await mkdir(path.dirname(filename), { recursive: true });

@@ -18,6 +18,8 @@ deploy.local.json
 !.env.example
 .aws/
 .iam_key
+GeoIP.conf
+*.mmdb
 config/
 *.pem
 *.key

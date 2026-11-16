@@ -1,0 +1,4 @@
+# Country ISO code : first subdivision ISO code. Included by nginx-geoip.conf's map.
+# Edit this list, install it on the server, then nginx -t and reload Nginx.
+"US:NJ" limited;
+"IN:TN" limited;

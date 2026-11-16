@@ -1,0 +1,19 @@
+# Install as /etc/systemd/system/dheera-geoipupdate.service.
+[Unit]
+Description=Update the site's local MaxMind GeoLite2 database
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+UMask=0022
+ExecStart=/usr/bin/geoipupdate -f /etc/GeoIP.conf -d /var/lib/GeoIP
+# Nginx workers need to reopen the database for auto_reload.
+ExecStartPost=/bin/chmod 0644 /var/lib/GeoIP/GeoLite2-City.mmdb
+TimeoutStartSec=15min
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/GeoIP

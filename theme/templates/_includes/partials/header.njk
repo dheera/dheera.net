@@ -10,6 +10,6 @@
   <nav aria-label="{{ view.t.mainNavigation }}">
     <a href="{{ view.links.home }}" data-local-link{% if view.section == 'photos' %} class="active" aria-current="page"{% endif %}>{{ view.t.photos }}</a>
     <a href="{{ view.links.projects }}" data-local-link{% if view.section == 'projects' %} class="active" aria-current="page"{% endif %}>{{ view.t.projects }}</a>
-    <a href="{{ view.links.about }}" data-local-link{% if view.section == 'about' %} class="active" aria-current="page"{% endif %}>{{ view.t.about }}</a>
+    <a href="{{ view.links.about }}" data-local-link data-visibility="about"{% if view.section == 'about' %} class="active" aria-current="page"{% endif %}>{{ view.t.about }}</a>
   </nav>
 </header>

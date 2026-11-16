@@ -157,6 +157,34 @@ test('a copied release contains every local HTML and stylesheet asset and needs 
   await stat(path.join(exported, 'vendor/photoswipe/photoswipe.esm.js'));
 });
 
+test('regional visibility hides only About content and links in both languages, with a normal static fallback', async t => {
+  const f = await fixture(t);
+  await f.publish();
+  const release = await f.release();
+  const normal = await readFile(path.join(release, 'assets/visibility-normal.css'), 'utf8');
+  const limited = await readFile(path.join(release, 'assets/visibility-limited.css'), 'utf8');
+  assert.equal(await readFile(path.join(release, 'visibility.css'), 'utf8'), normal);
+  assert.doesNotMatch(normal, /display\s*:\s*none/);
+  assert.match(limited, /\[data-visibility="about"\]\s*\{\s*display:\s*none\s*!important;\s*\}/);
+  assert.equal(limited.replace(/\/\*[\s\S]*?\*\//g, '').match(/\{/g)?.length, 1, 'Only the explicitly marked About content should be hidden');
+  for (const prefix of ['', 'zh-hant/']) {
+    for (const route of ['index.html', 'about/index.html', 'photos/harbor/index.html', 'projects/index.html']) {
+      const html = await readFile(path.join(release, prefix, route), 'utf8');
+      const styles = tags(html, 'link').filter(link => link.rel === 'stylesheet');
+      assert.equal(styles.at(-1)?.href, '/visibility.css', 'Visibility must be a regular, render-blocking head stylesheet');
+      const aboutLinks = tags(html, 'a').filter(link => link.href === `/${prefix}about/` && !link['data-language-choice']);
+      assert.equal(aboutLinks.length, 2, 'Header and footer both link to About');
+      assert.ok(aboutLinks.every(link => link['data-visibility'] === 'about'));
+      assert.equal(tags(html, 'main')[0]['data-visibility'], route === 'about/index.html' ? 'about' : undefined);
+      const languageGroup = tags(html, 'div').find(tag => tag.class?.includes('footer-language'));
+      assert.equal(languageGroup['data-visibility'], route === 'about/index.html' ? 'about' : undefined);
+      if (route !== 'about/index.html') {
+        assert.doesNotMatch(html.match(/<main\b[\s\S]*?<\/main>/)?.[0] || '', /data-visibility=/, 'Home, gallery and project content stays visible');
+      }
+    }
+  }
+});
+
 test('publish is read-only toward NAS text, ignores translation adapters and legacy cache, and falls back for missing Chinese', async t => {
   const f = await fixture(t);
   const before = await snapshot(f.sourceDir);

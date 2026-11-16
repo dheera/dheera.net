@@ -26,14 +26,15 @@
   <link rel="stylesheet" href="/assets/styles.css">
   {% if view.kind == 'gallery' and view.gallery.layout == 'pairs' %}<link rel="stylesheet" href="/assets/pairs.css">{% endif %}
   {% if view.kind == 'about' and view.about.travelMap %}<link rel="stylesheet" href="/assets/travel-map.css">{% endif %}
+  <link rel="stylesheet" href="/visibility.css">
   <script src="/assets/site.js" defer></script>
   {% if view.kind == 'gallery' and view.gallery.layout != 'pairs' %}<script type="module" src="/assets/gallery.js"></script>{% endif %}
   {% if view.kind == 'about' and view.about.travelMap %}<script type="module" src="/assets/travel-map.js"></script>{% endif %}
 </head>
 <body class="{{ view.bodyClass }}">
-  <a class="skip-link" href="#main">{{ view.t.skip }}</a>
+  <a class="skip-link" href="#main"{% if view.kind == 'about' %} data-visibility="about"{% endif %}>{{ view.t.skip }}</a>
   {% include "partials/header.njk" %}
-  <main id="main" tabindex="-1">{{ content | safe }}</main>
+  <main id="main" tabindex="-1"{% if view.kind == 'about' %} data-visibility="about"{% endif %}>{{ content | safe }}</main>
   {% include "partials/footer.njk" %}
 </body>
 </html>

@@ -1,0 +1,4 @@
+/* Selected by Nginx for regions listed in deployment/visibility-regions.map. */
+[data-visibility="about"] {
+  display: none !important;
+}
