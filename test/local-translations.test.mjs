@@ -232,3 +232,87 @@ test('legacy libraries can materialize prior hash-keyed cached translations with
   assert.equal(report.counts.generated, 1);
   assert.match(await f.read(`${f.gallery}/1.zh-Hant.md`), /先前的圖說。/);
 });
+
+test('paired galleries fill nested translations while preserving authored text, comments, and shared metadata', async t => {
+  const f = await fixture(t);
+  const pair = `${f.gallery}/01-bridge`;
+  await f.put(`${f.gallery}/gallery.md`, '---\nlayout: pairs\ntitle: City pairs\n---\n');
+  await f.put(`${pair}/a.jpg`, 'image');
+  await f.put(`${pair}/b.jpg`, 'image');
+  const source = '---\ntitle: Bridge\norder: 3\na:\n  label: Day\n  alt: A bridge in sunlight.\nb:\n  label: Night\n  alt: A bridge with lights.\n---\nUnknown · [Dheera](https://dheera.net/).';
+  await f.put(`${pair}/pair.md`, source);
+  await f.put(`${pair}/pair.zh-Hant.md`, '---\n# My pair title\ntitle: 我的橋\na:\n  label: 白晝 # keep my wording\n  custom: retained\nb:\n  custom: retained too # preserve this\n---\n');
+  const result = await f.translate({ 'City pairs': '城市對照', 'A bridge in sunlight.': '陽光下的橋。', Night: '夜晚',
+    'A bridge with lights.': '點燈的橋。', 'Unknown · [Dheera](https://dheera.net/).': '作者不詳 · [Dheera](https://dheera.net/)。' });
+  assert.equal(result.counts.generated, 5);
+  assert.equal(result.counts.missing, 0);
+  const saved = await f.read(`${pair}/pair.zh-Hant.md`);
+  assert.match(saved, /# My pair title\ntitle: 我的橋/);
+  assert.match(saved, /label: 白晝 # keep my wording/);
+  assert.match(saved, /a:\n  label: 白晝[^\n]*\n  custom: retained\n  alt: 陽光下的橋。/);
+  assert.match(saved, /b:\n  custom: retained too # preserve this\n  label: 夜晚\n  alt: 點燈的橋。/);
+  assert.match(saved, /作者不詳 · \[Dheera\]\(https:\/\/dheera.net\/\)。/);
+  assert.doesNotMatch(saved, /order:|a\.label:|b\.label:|credit:/);
+  const state = JSON.parse(await f.read('.translations/state.json'));
+  assert.equal(state.records[`${pair}/pair.zh-Hant.md`]['a.alt'].owner, 'generated');
+  assert.equal(state.records[`${pair}/pair.zh-Hant.md`]['a.label'].owner, 'manual');
+  assert.deepEqual((await f.translate({})).changedFiles, []);
+
+  await f.put(`${pair}/pair.md`, source.replace('label: Day', 'label: Morning').replace('label: Night', 'label: Dusk'));
+  const stale = await f.translate({});
+  assert.equal(stale.counts.stale, 2);
+  assert.equal(stale.counts.generated, 0);
+  assert.equal(await f.read(`${pair}/pair.zh-Hant.md`), saved);
+  await f.put(`${pair}/pair.zh-Hant.md`, saved.replace('  label: 夜晚\n', ''));
+  const filled = await f.translate({ Dusk: '黃昏' });
+  assert.equal(filled.counts.generated, 1);
+  assert.match(await f.read(`${pair}/pair.zh-Hant.md`), /label: 黃昏/);
+  assert.match(await f.read(`${pair}/pair.zh-Hant.md`), /label: 白晝 # keep my wording/);
+});
+
+test('pair sidecars are optional and original images, unrelated images, and their sidecars are ignored', async t => {
+  const f = await fixture(t);
+  const pair = `${f.gallery}/01-bridge`;
+  await f.put(`${f.gallery}/gallery.md`, '---\nlayout: pairs\n---\n');
+  await f.put(`${f.gallery}/1.md`, '---\nnot valid: [\n---\n');
+  await f.put(`${pair}/A.JPG`, 'image');
+  await f.put(`${pair}/b.png`, 'image');
+  await f.put(`${pair}/original.jpg`, 'original composite');
+  await f.put(`${pair}/original.md`, '---\nnot valid: [\n---\n');
+  await f.put(`${pair}/extra.jpg`, 'unrelated image');
+  await f.put(`${pair}/extra.md`, 'Do not translate.');
+  await f.put(`${pair}/a.md`, 'Pair metadata belongs in pair.md, not here.');
+  const result = await f.translate({});
+  assert.equal(result.counts.missing, 0);
+  assert.equal(result.counts.generated, 0);
+  assert.deepEqual(result.details, []);
+  await assert.rejects(f.read(`${pair}/pair.zh-Hant.md`), { code: 'ENOENT' });
+  await assert.rejects(f.read(`${pair}/original.zh-Hant.md`), { code: 'ENOENT' });
+});
+
+test('pair scanning rejects ambiguous or incomplete images and unsafe nested sidecar paths', async t => {
+  const f = await fixture(t);
+  const pair = `${f.gallery}/01-bridge`;
+  await f.put(`${f.gallery}/gallery.md`, '---\nlayout: pairs\n---\n');
+  await f.put(`${pair}/a.jpg`, 'image');
+  await f.put(`${pair}/pair.md`, '---\na:\n  label: Day\n---\n');
+  await assert.rejects(f.status(), /require one a image and one b image/);
+  await f.put(`${pair}/b.jpg`, 'image');
+  await f.put(`${pair}/a.png`, 'image');
+  await assert.rejects(f.status(), /duplicate a image/);
+  await rm(path.join(f.sourceDir, pair, 'a.png'));
+  const outside = path.join(f.root, 'outside-pair.md');
+  await writeFile(outside, 'Unrelated content.');
+  await symlink(outside, path.join(f.sourceDir, pair, 'pair.zh-Hant.md'));
+  await assert.rejects(f.translate({ Day: '白天' }), /cannot be symlinks/);
+  assert.equal(await readFile(outside, 'utf8'), 'Unrelated content.');
+  await rm(path.join(f.sourceDir, pair, 'pair.zh-Hant.md'));
+  await f.put(`${pair}/pair.zh-Hant.md`, '---\na: 手寫文字\n---\n');
+  await assert.rejects(f.translate({ Day: '白天' }), /a must be a mapping/);
+  await f.put(`${pair}/pair.zh-Hant.md`, '---\na:\n  label: 12\n---\n');
+  await assert.rejects(f.translate({ Day: '白天' }), /a.label must be text/);
+  await f.put(`${pair}/pair.zh-Hant.md`, '');
+  await rm(path.join(f.sourceDir, pair, 'a.jpg'));
+  await symlink(outside, path.join(f.sourceDir, pair, 'a.jpg'));
+  await assert.rejects(f.status(), /cannot be symlinks/);
+});

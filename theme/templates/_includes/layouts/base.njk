@@ -21,12 +21,13 @@
   {% if view.noindex %}<meta name="robots" content="noindex, follow">{% endif %}
   {% if view.redirect %}<meta http-equiv="refresh" content="0;url={{ view.redirect }}">{% endif %}
   <link rel="preload" href="/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
-  {% if view.kind == 'gallery' %}<link rel="stylesheet" href="/vendor/photoswipe/photoswipe.css">{% endif %}
+  {% if view.kind == 'gallery' and view.gallery.layout != 'pairs' %}<link rel="stylesheet" href="/vendor/photoswipe/photoswipe.css">{% endif %}
   <link rel="stylesheet" href="/assets/tokens.css">
   <link rel="stylesheet" href="/assets/styles.css">
+  {% if view.kind == 'gallery' and view.gallery.layout == 'pairs' %}<link rel="stylesheet" href="/assets/pairs.css">{% endif %}
   {% if view.kind == 'about' and view.about.travelMap %}<link rel="stylesheet" href="/assets/travel-map.css">{% endif %}
   <script src="/assets/site.js" defer></script>
-  {% if view.kind == 'gallery' %}<script type="module" src="/assets/gallery.js"></script>{% endif %}
+  {% if view.kind == 'gallery' and view.gallery.layout != 'pairs' %}<script type="module" src="/assets/gallery.js"></script>{% endif %}
   {% if view.kind == 'about' and view.about.travelMap %}<script type="module" src="/assets/travel-map.js"></script>{% endif %}
 </head>
 <body class="{{ view.bodyClass }}">

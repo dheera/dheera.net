@@ -60,6 +60,52 @@ Publishing generates public WebPs from the NAS originals and does not copy origi
 
 Photo sidecars and every photo metadata field are optional. Add, replace, edit or delete images and run publish. Explicit numeric order comes first; ties and unordered photos use natural filename order. A stable `slug` keeps a gallery's URL unchanged when you rename its folder. A gallery can use `layout: grid` or `layout: exhibition`; captions can be short or long Markdown stories.
 
+### Paired photographs
+
+Use `layout: pairs` in `gallery.md` for a collection of image pairs. Each pair has its own folder:
+
+```text
+photos/timetravelchina/
+  gallery.md
+  gallery.zh-Hant.md
+  01-lanzhou/
+    a.jpg
+    b.jpg
+    original.jpg       optional archival copy; ignored by publishing
+    pair.md            optional title, labels, order, caption/story
+    pair.zh-Hant.md     optional saved Chinese text
+  02-wuhan/
+    a.jpg
+    b.jpg
+```
+
+`a` and `b` are neutral identifiers: they can represent different dates, day/night, visible/infrared, or any other pairing. They accept the same image extensions as ordinary photographs, including JPEG, PNG, WebP, AVIF and TIFF; keep exactly one image with each stem. Other files, including `original.jpg`, are not rendered or published. For this layout, the publisher reads pair subfolders instead of loose images at the gallery root.
+
+An optional `pair.md` can look like this:
+
+```md
+---
+title: Lanzhou
+a:
+  label: "~1910"
+  alt: The iron bridge in the historical photograph.
+b:
+  label: "2016"
+  alt: The iron bridge photographed from a similar viewpoint in 2016.
+---
+~1910 photographer unknown · 2016 Dheera Venkatraman
+
+An optional longer story about the location or the photographs.
+```
+
+Credits belong in the Markdown caption with any story; there is no separate credit field. Every sidecar field is optional. Without a sidecar, the labels are **A** and **B**, with no invented title or caption. A is first and B is second. Both photographs are shown together: side by side on desktop, stacked on mobile, with labels and their shared caption. Paired galleries have no selector, slider, lightbox or zoom controls and need no JavaScript.
+
+Pairs follow natural folder-name order. An optional numeric `order:` in `pair.md` puts that pair before unordered pairs; ties use folder names. Set a gallery cover with a relative path such as `cover: 01-lanzhou/a.jpg`; the default is A from the first pair. Add a pair folder, replace A or B, edit its sidecar, or remove the folder, then publish as usual. A missing or duplicate A/B image stops the build and preserves the previous release.
+
+`pair.zh-Hant.md` contains translated `title`, `a.label`, `a.alt`, `b.label`, `b.alt`, and Markdown caption text only. The existing missing-only translation workflow handles these nested fields, preserving any text you already edited. Images, folder names and ordering are shared between languages.
+
+### Projects
+
 A project folder contains `project.md`. Metadata supports `title`, `summary`, `slug`, `cover`, `href`, `github`, `demo`, `video`, `order`, `tags`, `draft`. Explicit `href` opens directly. Otherwise a story or video gets a local page; a metadata-only entry points to its demo or GitHub. No redundant article is required for code distributed on GitHub. Referenced local images, MP4/WebM videos and PDFs are published with content hashes. Local videos are copied unchanged. Interactive applications keep their own build/deployment and link by URL.
 
 `video` accepts either a project-relative MP4/WebM path or an HTTPS YouTube URL. For example, `video: https://www.youtube.com/shorts/GcAxKKQDbNw` embeds a responsive portrait player; ordinary watch, `youtu.be`, and embed URLs use a landscape player. The YouTube player uses the privacy-enhanced `youtube-nocookie.com` embed. The URL stays in the English `project.md` and is shared by both languages, so Chinese sidecars only need translated text. `cover` still supplies the project card image. Keep any separate demo or longer video link in `demo`.
@@ -101,12 +147,13 @@ theme/templates/_includes/partials/      navigation, cards, image markup
 theme/locales/en.json                    English interface labels
 theme/locales/zh-Hant.json               Chinese interface labels
 theme/assets/gallery.js                  PhotoSwipe enhancement
+theme/assets/pairs.css                   paired-photograph layout
 theme/assets/site.js                     style/layout controls
 theme/assets/travel-map.css              map appearance
 theme/assets/travel-map.js               map interaction
 ```
 
-Change these files to redesign the site; no publishing logic or NAS content migration is needed. Midnight uses self-hosted DM Sans with system Chinese fallbacks. PhotoSwipe 5.4.4 supplies touch swipe and zoom. Themes share the same content.
+Change these files to redesign the site; no publishing logic or NAS content migration is needed. Midnight uses self-hosted DM Sans with system Chinese fallbacks. PhotoSwipe 5.4.4 supplies touch swipe and zoom for ordinary galleries; paired galleries display their images directly. Themes share the same content.
 
 `lib/static-site.mjs` turns prepared content into page data for Eleventy. `lib/publisher.mjs`, `projects.mjs`, `site-content.mjs` and `image-cache.mjs` prepare content and assets. `lib/local-translations.mjs` is the explicit translation-file workflow. `lib/releases.mjs` builds and activates complete static releases.
 

@@ -92,5 +92,7 @@
   "travelRoutesLegend": "Routes",
   "travelMapHelp": "Drag to move. Pinch or use + / − to zoom. Keyboard: arrows to move, + / − to zoom, 0 to reset.",
   "travelOriginalMap": "Original travel map",
-  "travelGeography": "Geography: Natural Earth"
+  "travelGeography": "Geography: Natural Earth",
+  "imagePair": "image pair",
+  "imagePairs": "image pairs"
 }

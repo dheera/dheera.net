@@ -92,5 +92,7 @@
   "travelRoutesLegend": "路線",
   "travelMapHelp": "拖曳移動，雙指或 + / − 縮放。鍵盤：方向鍵移動，+ / − 縮放，0 重設。",
   "travelOriginalMap": "原始旅遊地圖",
-  "travelGeography": "地理資料：Natural Earth"
+  "travelGeography": "地理資料：Natural Earth",
+  "imagePair": "組照片",
+  "imagePairs": "組照片"
 }

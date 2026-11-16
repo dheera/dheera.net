@@ -1,0 +1,26 @@
+.paired-gallery-page .gallery-intro { padding:32px 0 40px; }
+.paired-gallery-page .gallery-title-line { margin-top:28px; }
+.paired-gallery-page .gallery-intro h1 { font-size:clamp(42px,6vw,80px); max-width:1100px; }
+.paired-gallery { display:flex; flex-direction:column; gap:75px; }
+.pair-card { width:100%; max-width:1100px; margin:auto; }
+.pair-heading { display:flex; justify-content:space-between; align-items:baseline; gap:20px; margin:13px 0 20px; }
+.pair-place { display:flex; gap:20px; align-items:baseline; min-width:0; }
+.pair-place h2 { font-size:clamp(25px,3vw,36px); font-weight:400; letter-spacing:-.025em; overflow-wrap:anywhere; }
+.pair-number { color:var(--muted); font-size:11px; }
+.pair-stage { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:18px; }
+.pair-image { position:relative; background:var(--surface); }
+.pair-image img { display:block; width:100%; height:auto; }
+.pair-label { position:absolute; top:18px; left:18px; max-width:calc(100% - 36px); padding:7px 11px; background:#151917dd; color:#f2f3ed; font-size:12px; backdrop-filter:blur(6px); pointer-events:none; overflow-wrap:anywhere; }
+.pair-caption { font-size:13px; color:var(--muted); line-height:1.7; margin-top:18px; max-width:760px; }
+.pair-portrait .pair-stage { max-width:850px; margin:0 auto; }
+@media(max-width:700px) {
+ .paired-gallery-page .gallery-intro { padding-top:20px; padding-bottom:30px; }
+ .paired-gallery-page .gallery-title-line { margin-top:22px; }
+ .paired-gallery-page .gallery-intro h1 { font-size:45px; }
+ .paired-gallery { gap:52px; }
+ .pair-heading { margin:5px 0 15px; gap:10px; }
+ .pair-place { gap:12px; }
+ .pair-place h2 { font-size:28px; }
+ .pair-stage { grid-template-columns:minmax(0,1fr); gap:12px; }
+ .pair-label { top:10px; left:10px; max-width:calc(100% - 20px); padding:5px 8px; font-size:11px; }
+}

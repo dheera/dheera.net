@@ -1,0 +1,14 @@
+<div id="photo-gallery" class="paired-gallery" aria-label="{{ view.gallery.title }}">
+  {% for pair in view.gallery.pairs %}{% set pairIndex = loop.index %}
+  <figure class="pair-card{% if pair.portrait %} pair-portrait{% endif %}">
+    <figcaption class="pair-heading"><div class="pair-place"><span class="pair-number">{{ pairIndex | padNumber }}</span>{% if pair.title %}<h2>{{ pair.title }}</h2>{% endif %}</div></figcaption>
+    <div class="pair-stage">
+      {% for side in ['a', 'b'] %}{% set photo = pair[side] %}
+      <div class="pair-image">
+        {% set imageEager = pairIndex == 1 %}{% set imageSizes = '(max-width: 700px) 100vw, 45vw' %}{% include 'partials/image.njk' %}
+        <span class="pair-label">{{ photo.label }}</span>
+      </div>{% endfor %}
+    </div>
+    {% if pair.captionHtml %}<div class="prose pair-caption">{{ pair.captionHtml | safe }}</div>{% endif %}
+  </figure>{% endfor %}
+</div>
