@@ -1,0 +1,12 @@
+<article class="collection-card collection-{{ cardIndex }}">
+  <a class="collection-image-link" href="{{ gallery.url }}" data-local-link aria-label="{{ view.t.explore }} {{ gallery.title }}">
+    <span class="collection-number" aria-hidden="true">{{ cardIndex | padNumber }}</span>
+    {% set photo = gallery.cover %}{% set imageEager = cardIndex == 1 %}{% set imageSizes = '(max-width: 700px) 100vw, 80vw' %}{% include 'partials/image.njk' %}
+    <span class="image-open-label">{{ view.t.viewCollection }} <span aria-hidden="true">↗</span></span>
+  </a>
+  <div class="collection-copy">
+    <div class="collection-title-row"><h2><a href="{{ gallery.url }}" data-local-link>{{ gallery.title }}</a></h2><span class="collection-arrow" aria-hidden="true">↗</span></div>
+    {% if gallery.excerpt %}<p class="collection-description">{{ gallery.excerpt }}</p>{% endif %}
+    <span class="collection-count">{{ gallery.countLabel }}</span>
+  </div>
+</article>

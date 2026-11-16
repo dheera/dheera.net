@@ -1,0 +1,11 @@
+<article class="project-card {{ 'has-cover' if project.cover else 'no-cover' }}">
+  {% if project.cover %}<a class="project-cover" href="{{ project.destination.href }}"{% if project.destination.local %} data-local-link{% endif %} aria-label="{{ view.t.openProject }}: {{ project.title }}">
+    {% set photo = project.cover %}{% set imageEager = cardIndex < 3 %}{% set imageSizes = '(max-width: 700px) 100vw, 46vw' %}{% include 'partials/image.njk' %}
+    <span class="project-cover-arrow" aria-hidden="true">{{ '→' if project.destination.local else '↗' }}</span>
+  </a>{% else %}<span class="project-index" aria-hidden="true">{{ cardIndex | padNumber }}</span>{% endif %}
+  <div class="project-copy">
+    <h2><a href="{{ project.destination.href }}"{% if project.destination.local %} data-local-link{% endif %}>{{ project.title }}{% if not project.cover %}<span aria-hidden="true">{{ '→' if project.destination.local else '↗' }}</span>{% endif %}</a></h2>
+    {% if project.summary %}<p>{{ project.summary }}</p>{% endif %}
+    {% set actions = project.actions %}{% include 'partials/project-actions.njk' %}
+  </div>
+</article>

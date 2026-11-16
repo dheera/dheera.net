@@ -1,0 +1,3 @@
+{% if actions | length %}<div class="project-actions">
+  {% for link in actions %}<a class="project-action" href="{{ link.href }}"{% if link.local %} data-local-link{% endif %}>{{ link.label }} <span aria-hidden="true">{{ '→' if link.local else '↗' }}</span></a>{% endfor %}
+</div>{% endif %}

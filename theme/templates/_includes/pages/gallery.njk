@@ -1,0 +1,26 @@
+<section class="gallery-intro" aria-labelledby="gallery-title">
+  <a href="{{ view.links.home }}" class="back-link" data-local-link><span aria-hidden="true">←</span> {{ view.t.allCollections }}</a>
+  <div class="gallery-title-line"><span class="eyebrow">{{ view.t.collection }}</span><span class="gallery-total">{{ view.gallery.countLabel }}</span></div>
+  <h1 id="gallery-title">{{ view.gallery.title }}</h1>
+  {% if view.gallery.descriptionHtml %}<div class="prose gallery-description">{{ view.gallery.descriptionHtml | safe }}</div>{% endif %}
+</section>
+<div class="gallery-toolbar"><p><span class="desktop-hint">{{ view.t.desktopHint }}</span><span class="mobile-hint">{{ view.t.mobileHint }}</span></p>
+  <div class="layout-options" role="group" aria-label="{{ view.t.layout }}" data-enhancement hidden>
+    <button type="button" data-layout-choice="grid" aria-pressed="{{ 'true' if view.gallery.layout == 'grid' else 'false' }}"><span class="grid-icon" aria-hidden="true">▦</span> {{ view.t.grid }}</button>
+    <button type="button" data-layout-choice="exhibition" aria-pressed="{{ 'true' if view.gallery.layout == 'exhibition' else 'false' }}"><span class="exhibition-icon" aria-hidden="true">▤</span> {{ view.t.exhibition }}</button>
+  </div>
+</div>
+<div id="photo-gallery" class="photo-gallery" data-layout="{{ view.gallery.layout }}" aria-label="{{ view.gallery.title }}"
+  data-close-label="{{ view.t.closePhoto }}" data-zoom-label="{{ view.t.zoomPhoto }}" data-previous-label="{{ view.t.previousPhoto }}" data-next-label="{{ view.t.nextPhoto }}" data-error-label="{{ view.t.photoError }}">
+  {% for photo in view.gallery.photos %}<figure class="photo-figure {{ 'has-caption' if photo.title or photo.captionHtml else 'image-only' }}">
+    <a class="photo-link" href="{{ photo.src }}" data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}"{% if photo.srcset %} data-pswp-srcset="{{ photo.srcset }}"{% endif %} data-photo-label="{{ photo.lightboxLabel }}" aria-label="{{ view.t.openPhoto }} {{ loop.index }}{% if photo.title %}: {{ photo.title }}{% endif %}">
+      {% set imageEager = loop.index < 3 %}{% set imageSizes = '(max-width: 700px) 100vw, 72vw' %}{% include 'partials/image.njk' %}
+      <span class="photo-enlarge" aria-hidden="true">↗</span>
+    </a>
+    {% if photo.title or photo.captionHtml %}<figcaption><span class="photo-number">{{ loop.index | padNumber }}</span>{% if photo.title %}<h2>{{ photo.title }}</h2>{% endif %}{% if photo.captionHtml %}<div class="prose photo-story">{{ photo.captionHtml | safe }}</div>{% endif %}</figcaption>{% endif %}
+  </figure>{% endfor %}
+</div>
+{% if not view.gallery.count %}<div class="empty-state"><p>{{ view.t.emptyGallery }}</p></div>{% endif %}
+{% if view.otherGalleries | length %}<section class="more-collections"><div class="section-heading"><h2>{{ view.t.keepExploring }}</h2><a href="{{ view.links.home }}" data-local-link>{{ view.t.allCollections }} <span aria-hidden="true">↗</span></a></div><div class="related-grid">
+  {% for gallery in view.otherGalleries %}{% set cardIndex = loop.index %}{% include 'partials/collection-card.njk' %}{% endfor %}
+</div></section>{% endif %}

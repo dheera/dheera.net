@@ -1,0 +1,31 @@
+{% set map = view.about.travelMap %}
+<section class="travel-map" id="travel-map" aria-labelledby="travel-map-heading">
+  <header class="travel-map-heading">
+    <div><h2 id="travel-map-heading">{{ view.t.travelMapTitle }}</h2><p>{{ view.t.travelMapIntro }}</p></div>
+    <div class="travel-map-counts"><span>{{ map.placeCount }} {{ view.t.travelPlaces }}</span><span>{{ map.routeCount }} {{ view.t.travelRoutes }}</span></div>
+  </header>
+  <div class="travel-map-controls" data-map-controls hidden>
+    <div class="travel-map-navigation" role="group" aria-label="{{ view.t.travelMapNavigation }}">
+      <button type="button" data-map-action="out" aria-label="{{ view.t.travelZoomOut }}">−</button>
+      <button type="button" data-map-action="in" aria-label="{{ view.t.travelZoomIn }}">+</button>
+      <button type="button" data-map-action="reset" class="travel-map-reset">{{ view.t.travelReset }}</button>
+    </div>
+  </div>
+  <div class="travel-map-canvas" aria-label="{{ view.t.travelMapNavigation }}" aria-describedby="travel-map-help">
+    <svg class="travel-map-svg" viewBox="0 0 {{ map.width }} {{ map.height }}" role="img" aria-labelledby="travel-map-svg-title travel-map-svg-description">
+      <title id="travel-map-svg-title">{{ view.t.travelMapTitle }}</title><desc id="travel-map-svg-description">{{ map.placeCount }} {{ view.t.travelPlaces }}; {{ map.routeCount }} {{ view.t.travelRoutes }}. {{ view.t.travelMapDescription }}</desc>
+      <defs><clipPath id="travel-map-clip"><rect width="{{ map.width }}" height="{{ map.height }}"/></clipPath></defs>
+      <g clip-path="url(#travel-map-clip)"><g data-map-viewport>
+        <path class="travel-map-ocean" d="{{ map.outlinePath }}"/>
+        <path class="travel-map-graticule" d="{{ map.graticulePath }}"/>
+        <path class="travel-map-land" d="{{ map.landPath }}"/>
+        <g class="travel-map-routes">{% for route in map.routes %}<path d="{{ route.path }}"/>{% endfor %}</g>
+        <g class="travel-map-places">{% for place in map.places %}<circle cx="{{ place.x }}" cy="{{ place.y }}" r="3.2" data-map-place="{{ place.id }}" data-place-name="{{ place.name }}" data-x="{{ place.x }}" data-y="{{ place.y }}"><title>{{ place.name }}</title></circle>{% endfor %}</g>
+      </g></g>
+    </svg>
+    <span class="travel-map-label" data-map-label hidden></span>
+  </div>
+  <div class="travel-map-caption"><div class="travel-map-legend"><span><i class="travel-map-place-key" aria-hidden="true"></i>{{ view.t.travelPlacesLegend }}</span><span><i class="travel-map-route-key" aria-hidden="true"></i>{{ view.t.travelRoutesLegend }}</span></div><output class="travel-map-selection" data-map-selection aria-live="polite"></output></div>
+  <p class="travel-map-help" id="travel-map-help" data-map-controls hidden>{{ view.t.travelMapHelp }}</p>
+  {% if map.source %}<p class="travel-map-credit"><a href="{{ map.source.url }}" target="_blank" rel="noopener noreferrer">{{ view.t.travelOriginalMap }} ↗</a></p>{% endif %}
+</section>

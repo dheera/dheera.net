@@ -1,0 +1,7 @@
+<article class="about-content{% if view.about.portrait %} with-portrait{% endif %}"><header class="page-intro"><h1>{{ view.about.title }}</h1></header>
+  {% if view.about.portrait %}<figure class="about-portrait">{% set photo = view.about.portrait %}{% set imageEager = true %}{% set imageSizes = '(max-width: 700px) 100vw, 35vw' %}{% include 'partials/image.njk' %}</figure>{% endif %}
+  <div class="about-body"><div class="prose">{{ view.about.bodyHtml | safe }}</div><div class="about-links">
+    {% for link in view.contactLinks %}<a class="project-action" href="{{ link.href }}"{% if link.local %} data-local-link{% endif %}>{{ link.label }} <span aria-hidden="true">{{ '→' if link.local else '↗' }}</span></a>{% endfor %}
+  </div></div>
+</article>
+{% if view.about.travelMap %}{% include 'partials/travel-map.njk' %}{% endif %}

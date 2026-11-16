@@ -1,0 +1,11 @@
+---
+pagination:
+  data: sitePages
+  size: 1
+  alias: view
+  addAllPagesToCollections: true
+permalink: "{{ view.url }}"
+layout: layouts/base.njk
+eleventyExcludeFromCollections: true
+---
+{% include "pages/" + view.kind + ".njk" %}

@@ -1,0 +1,12 @@
+{
+  "ROSshow": "ROSshow",
+  "Visualize robot sensor data directly in a terminal with Unicode and ASCII art.": "以 Unicode 與 ASCII 字元畫，直接在終端機中呈現機器人的感測資料。",
+  "ROSboard": "ROSboard",
+  "A browser dashboard for ROS topics, designed to work on your phone beside your robot.": "在瀏覽器中查看 ROS 主題資料，讓你拿著手機就能在機器人旁觀察運作狀態。",
+  "Big Yellow": "Big Yellow",
+  "A compact CNC mill, converted with 3D-printed parts and a little mechanical persistence.": "結合 3D 列印零件與機械改造，打造一台小巧的 CNC 銑床。",
+  "## From a mini-mill to CNC\n\nBig Yellow converts a Proxxon MF70 mini-mill into a CNC machine using 3D-printed parts and off-the-shelf hardware. The conversion extends the Y-axis travel from 46 to 90 mm and adds 15 mm to the Z axis.\n\nThe project grew out of a desire to make small objects in metal and wood, beyond what a home 3D printer could produce. The resulting machine fits inside an enclosure about the size of a typical 3D printer.\n\n![The Big Yellow CNC mill inside its enclosure.](detail.jpg)\n\nThe repository includes printable parts, a hardware list, and illustrated assembly instructions.": "## 從迷你銑床到 CNC\n\nBig Yellow 使用 3D 列印零件與市售五金，將 Proxxon MF70 迷你銑床改造成 CNC 機器。改造後，Y 軸行程從 46 毫米延長至 90 毫米，Z 軸也增加了 15 毫米的行程。\n\n這個計畫源於想以金屬與木材製作小物件的念頭，探索家用 3D 列印機之外的可能。完成的機器連同外罩，體積約與一般 3D 列印機相當。\n\n![裝在外罩中的 Big Yellow CNC 銑床。](detail.jpg)\n\n程式碼儲存庫提供可列印的零件、五金清單，以及圖解組裝步驟。",
+  "Luxo": "Luxo",
+  "A 3D-printed robotic desk lamp that can hop across a table.": "一盞以 3D 列印打造、能在桌上跳動的機器人檯燈。",
+  "## A lamp with a little movement\n\nInspired by Pixar's Luxo Jr., this 3D-printed robot uses coordinated servo movements to jump and move around. It was demonstrated at Bay Area Maker Faire in 2019.\n\nThe project explores expressive robot movement and human–robot interaction, using the ROS JointTrajectoryController stack. Printable parts and code are available in the repository.": "## 會動的檯燈\n\n靈感來自皮克斯的 Luxo Jr.，這台 3D 列印機器人透過協調多個伺服馬達的動作，實現跳躍與移動，並曾在 2019 年灣區 Maker Faire 展出。\n\n這個計畫運用 ROS JointTrajectoryController，探索富有表情的機器人動作，以及人與機器人的互動。可列印的零件與程式碼都收錄在儲存庫中。"
+}

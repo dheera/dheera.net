@@ -1,0 +1,11 @@
+<footer class="site-footer">
+  <a class="footer-name" href="{{ view.links.about }}" data-local-link>{{ view.site.name }}</a>
+  <div class="footer-controls">
+    <nav class="footer-links" aria-label="{{ view.t.moreInformation }}">
+      {% for link in view.footerLinks %}{% if link.href != view.links.about %}<a href="{{ link.href }}"{% if link.local %} data-local-link{% endif %}>{{ link.label }} <span aria-hidden="true">{{ '→' if link.local else '↗' }}</span></a>{% endif %}{% endfor %}
+    </nav>
+    <div class="language-options footer-language" role="group" aria-label="{{ view.t.language }}">
+      {% for alternative in view.alternates %}<a href="{{ alternative.path }}" data-local-link data-language-choice="{{ alternative.language }}" lang="{{ alternative.language }}" hreflang="{{ alternative.language }}" aria-label="{{ alternative.name }}"{% if alternative.active %} aria-current="page"{% else %} rel="alternate"{% endif %}>{{ alternative.label }}</a>{% if not loop.last %}<span aria-hidden="true">/</span>{% endif %}{% endfor %}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,5 @@
+<section class="page-intro" aria-labelledby="projects-title"><h1 id="projects-title">{{ view.t.projectsHeadline }}</h1><p>{{ view.t.projectsDescription }}</p></section>
+<section class="projects-section" aria-label="{{ view.t.projects }}"><div class="section-heading"><h2>{{ view.t.projects }}</h2><span>{{ view.projects | length | padNumber }} {{ view.t.projectCount }}</span></div>
+  {% if view.projects | length %}<div class="projects-grid">{% for project in view.projects %}{% set cardIndex = loop.index %}{% include 'partials/project-card.njk' %}{% endfor %}</div>
+  {% else %}<div class="empty-state"><h2>{{ view.t.noProjectsTitle }}</h2><p>{{ view.t.noProjectsDescription }}</p></div>{% endif %}
+</section>

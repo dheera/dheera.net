@@ -1,5 +1,0 @@
-#!/bin/bash
-# npx nodemon
-
-cd "$(dirname "$0")"
-npx nodemon -x 'node index.js --debug || touch index.js'

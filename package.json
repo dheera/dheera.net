@@ -1,37 +1,33 @@
 {
-  "name": "dheeranet2",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "accept-language-parser": "^1.5.0",
-    "ansi-regex": "^6.0.1",
-    "aws-sdk": "^2.893.0",
-    "boto": "^0.0.1",
-    "boto3": "^0.0.1",
-    "cookie-parser": "^1.4.5",
-    "express": "^4.17.3",
-    "express-minify-html-2": "^1.0.1",
-    "geoip-lite": "^1.4.2",
-    "helmet": "^4.5.0",
-    "json-schema": "^0.4.0",
-    "md5": "^2.3.0",
-    "memoizee": "^0.4.15",
-    "mkdirp-sync": "^0.0.3",
-    "nodemon": "^2.0.7",
-    "npm": "^9.6.2",
-    "nunjucks": "^3.2.3",
-    "pino": "^6.11.3",
-    "pino-pretty": "^4.7.1",
-    "qs": "^6.5.2"
-  },
+  "name": "dheera-net",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "init-library": "node init-library.mjs",
+    "publish": "node publish.mjs",
+    "deploy": "node deploy.mjs",
+    "dev": "node server.mjs",
+    "test": "node --test",
+    "build": "node publish.mjs",
+    "build:theme": "node publish.mjs --theme-only",
+    "translate": "node translate.mjs",
+    "translations:status": "node translate.mjs --status",
+    "preview": "node server.mjs",
+    "deploy:production": "node deploy-ec2.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com//dheera/dheera.net"
+  "dependencies": {
+    "@11ty/eleventy": "3.1.8",
+    "d3-geo": "3.1.1",
+    "markdown-it": "14.3.3",
+    "photoswipe": "5.4.4",
+    "sharp": "0.35.5",
+    "topojson-client": "3.1.0",
+    "world-atlas": "2.0.2",
+    "yaml": "2.9.1"
   },
-  "author": "",
-  "license": "ISC"
+  "engines": {
+    "node": ">=22.12.0"
+  }
 }

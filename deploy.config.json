@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "defaultTarget": "preview",
+  "targets": {
+    "preview": {
+      "bucket": "dheera-net",
+      "region": "us-west-2",
+      "profile": "dheera-site",
+      "siteURL": "https://dk7lfbp0bsgga.cloudfront.net",
+      "cacheControl": "public, max-age=60, s-maxage=60, must-revalidate, stale-if-error=0",
+      "invalidateCloudFront": false
+    }
+  }
+}

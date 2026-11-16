@@ -1,0 +1,15 @@
+{% if view.designPreview %}<div class="direction-bar" data-enhancement hidden>
+  <span class="direction-label"><span class="preview-dot"></span><span>{{ view.t.designPreview }}</span></span>
+  <div class="direction-options" role="group" aria-label="{{ view.t.designDirection }}">
+    {% for style in view.styles %}<button type="button" data-style-choice="{{ style.id }}" aria-pressed="{{ 'true' if view.defaultStyle == style.id else 'false' }}"><span class="style-dot {{ style.id }}-dot"></span>{{ style.label }}</button>{% endfor %}
+  </div>
+  <span class="direction-note">{{ view.t.directionsNote }}</span>
+</div>{% endif %}
+<header class="site-header">
+  <a class="wordmark" href="{{ view.links.home }}" data-local-link aria-label="{{ view.site.name }}">dheera<span class="wordmark-period">.</span><span class="wordmark-suffix">net</span></a>
+  <nav aria-label="{{ view.t.mainNavigation }}">
+    <a href="{{ view.links.home }}" data-local-link{% if view.section == 'photos' %} class="active" aria-current="page"{% endif %}>{{ view.t.photos }}</a>
+    <a href="{{ view.links.projects }}" data-local-link{% if view.section == 'projects' %} class="active" aria-current="page"{% endif %}>{{ view.t.projects }}</a>
+    <a href="{{ view.links.about }}" data-local-link{% if view.section == 'about' %} class="active" aria-current="page"{% endif %}>{{ view.t.about }}</a>
+  </nav>
+</header>
