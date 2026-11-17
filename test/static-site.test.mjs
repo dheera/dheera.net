@@ -119,6 +119,41 @@ test('publishing emits complete English and Chinese HTML, reciprocal language li
   assert.equal(await realpath(path.join(f.outputDir, 'dist')), await realpath(release));
 });
 
+test('gallery subtitles are optional localized plain text above the title, with English fallback', async t => {
+  const f = await fixture(t);
+  await writeFile(path.join(f.gallery, 'gallery.md'), header('title: Harbor collection\nsubtitle: Light <em>and</em> water\nlayout: exhibition', 'Stories beside the water.'));
+  await writeFile(path.join(f.gallery, 'gallery.zh-Hant.md'), header('title: 港灣影像\nsubtitle: 光 <em>與</em> 水', '水邊的故事。'));
+  for (const [slug, fields] of [
+    ['fallback', 'subtitle: Across the water'],
+    ['no-subtitle', ''],
+    ['empty-subtitle', 'subtitle: ""'],
+  ]) {
+    const dir = path.join(f.sourceDir, 'photos', slug);
+    await image(path.join(dir, '1.jpg'));
+    await writeFile(path.join(dir, 'gallery.md'), header(`title: ${slug}\n${fields}`));
+    // A removed English subtitle must not resurrect an old Chinese one.
+    if (slug !== 'fallback') await writeFile(path.join(dir, 'gallery.zh-Hant.md'), header('subtitle: 舊的副標題'));
+  }
+  await f.publish();
+  const release = await f.release();
+  for (const [prefix, subtitle] of [['', 'Light &lt;em&gt;and&lt;/em&gt; water'], ['zh-hant/', '光 &lt;em&gt;與&lt;/em&gt; 水']]) {
+    const html = await readFile(path.join(release, prefix, 'photos/harbor/index.html'), 'utf8');
+    const eyebrow = `<span class="eyebrow">${subtitle}</span>`;
+    assert.ok(html.includes(eyebrow), `${prefix || 'English'} subtitle is escaped plain text`);
+    assert.ok(html.indexOf(eyebrow) < html.indexOf('<h1 id="gallery-title">'));
+    assert.doesNotMatch(html, /A photographic collection|<em>and<\/em>|<em>與<\/em>/);
+    const fallback = await readFile(path.join(release, prefix, 'photos/fallback/index.html'), 'utf8');
+    assert.match(fallback, /<span class="eyebrow">Across the water<\/span>/);
+    for (const slug of ['no-subtitle', 'empty-subtitle']) {
+      const optional = await readFile(path.join(release, prefix, 'photos', slug, 'index.html'), 'utf8');
+      const titleLine = optional.match(/<div class="gallery-title-line">([\s\S]*?)<\/div>/)?.[1];
+      assert.ok(titleLine);
+      assert.doesNotMatch(titleLine, /eyebrow|A photographic collection|舊的副標題/);
+      assert.match(titleLine, /gallery-total/, 'Photo count remains when the subtitle is omitted');
+    }
+  }
+});
+
 test('a copied release contains every local HTML and stylesheet asset and needs no runtime manifest', async t => {
   const f = await fixture(t);
   await f.publish();

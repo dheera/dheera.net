@@ -95,6 +95,26 @@ test('English edits only report stale Chinese; translation fills it again after 
   assert.match(await f.read(`${f.gallery}/1.zh-Hant.md`), /船隻在黎明時出港。/);
 });
 
+test('gallery subtitles use missing-only translation and preserve existing Chinese after English changes', async t => {
+  const f = await fixture(t);
+  await f.put(`${f.gallery}/gallery.md`, '---\nsubtitle: A landscape measured in heat\n---\n');
+  const generated = await f.translate({ 'A landscape measured in heat': '以熱量描繪的地景' });
+  assert.equal(generated.counts.generated, 1);
+  const original = await f.read(`${f.gallery}/gallery.zh-Hant.md`);
+  assert.match(original, /subtitle: 以熱量描繪的地景/);
+  await f.put(`${f.gallery}/gallery.md`, '---\nsubtitle: The warmth beneath the ice\n---\n');
+  const preserved = await f.translate({ 'The warmth beneath the ice': '不能覆蓋既有翻譯' });
+  assert.equal(preserved.counts.generated, 0);
+  assert.equal(preserved.counts.stale, 1);
+  assert.equal(preserved.details.find(detail => detail.status === 'stale')?.field, 'subtitle');
+  assert.equal(await f.read(`${f.gallery}/gallery.zh-Hant.md`), original);
+  await f.put(`${f.gallery}/gallery.zh-Hant.md`, '---\nsubtitle: 我自己修改的副標題\n---\n');
+  const edited = await f.translate({ 'The warmth beneath the ice': '也不能覆蓋手寫文字' });
+  assert.equal(edited.counts.generated, 0);
+  assert.equal(edited.counts.manual, 1);
+  assert.match(await f.read(`${f.gallery}/gallery.zh-Hant.md`), /subtitle: 我自己修改的副標題/);
+});
+
 test('hand-edited Chinese is preserved, marked stale on source changes, and can be acknowledged', async t => {
   const f = await fixture(t);
   await f.put(`${f.gallery}/1.md`, 'A quiet harbor.');

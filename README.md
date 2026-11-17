@@ -40,7 +40,7 @@ Normal builds omit the design-preview toolbar and use `defaultStyle` from `site.
   assets/travel.geojson      editable travel places and routes
   photos/
     icelandthermal/
-      gallery.md             optional title, intro, cover, layout
+      gallery.md             optional title, subtitle, intro, cover, layout
       gallery.zh-Hant.md      saved Chinese text, editable
       01.jpg
       01.md                  optional caption/story
@@ -61,6 +61,21 @@ Optional `instagram` and `rednote` URL fields in `site.md` add monochrome profil
 Publishing generates public WebPs from the NAS originals and does not copy original JPEGs into `dist`.
 
 Photo sidecars and every photo metadata field are optional. Add, replace, edit or delete images and run publish. Explicit numeric order comes first; ties and unordered photos use natural filename order. A stable `slug` keeps a gallery's URL unchanged when you rename its folder. A gallery can use `layout: grid` or `layout: exhibition`; captions can be short or long Markdown stories.
+
+An optional plain-text `subtitle` in `gallery.md` appears in the small line above the gallery title. Omit it or use `subtitle: ""` to hide that line; there is no generic subtitle. The Markdown body remains the introduction below the title:
+
+```md
+---
+title: Land of Fire and Ice
+subtitle: A landscape measured in heat
+layout: exhibition
+---
+Iceland, through a thermal camera.
+
+The colors in this series represent thermal measurements.
+```
+
+Put the translated `subtitle: 以熱量描繪的地景` in `gallery.zh-Hant.md`. The missing-only translation command handles this field like the title and body; existing Chinese text is preserved. Until a translation is saved, the Chinese page uses the English subtitle. Removing the English field hides it in both languages.
 
 ### Paired photographs
 

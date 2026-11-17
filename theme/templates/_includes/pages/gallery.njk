@@ -1,6 +1,6 @@
 <section class="gallery-intro" aria-labelledby="gallery-title">
   <a href="{{ view.links.home }}" class="back-link" data-local-link><span aria-hidden="true">←</span> {{ view.t.allCollections }}</a>
-  <div class="gallery-title-line"><span class="eyebrow">{{ view.t.collection }}</span><span class="gallery-total">{{ view.gallery.countLabel }}</span></div>
+  <div class="gallery-title-line">{% if view.gallery.subtitle %}<span class="eyebrow">{{ view.gallery.subtitle }}</span>{% endif %}<span class="gallery-total">{{ view.gallery.countLabel }}</span></div>
   <h1 id="gallery-title">{{ view.gallery.title }}</h1>
   {% if view.gallery.descriptionHtml %}<div class="prose gallery-description">{{ view.gallery.descriptionHtml | safe }}</div>{% endif %}
 </section>

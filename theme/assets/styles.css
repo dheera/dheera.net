@@ -118,7 +118,8 @@ main { padding: 0 var(--gutter); max-width: calc(var(--page-width) + 2 * var(--g
 .back-link { display: inline-flex; align-items: center; gap: 11px; color: var(--muted); font-size: 11px; padding: 7px 0; }
 .back-link:hover { color: var(--foreground); }
 .gallery-title-line { display: flex; align-items: center; justify-content: space-between; margin-top: 51px; gap: 15px; }
-.gallery-total { font-size: 11px; color: var(--muted); }
+.gallery-title-line .eyebrow { min-width: 0; overflow-wrap: anywhere; }
+.gallery-total { margin-left: auto; flex-shrink: 0; font-size: 11px; color: var(--muted); }
 .gallery-intro h1 { font-size: clamp(52px, 7.7vw, 118px); font-weight: 400; line-height: 1.05; letter-spacing: -.05em; font-family: var(--serif); margin-top: 24px; max-width: 1150px; }
 .prose { font-size: 14px; line-height: 1.8; color: var(--muted); overflow-wrap: anywhere; }
 .prose > * + * { margin-top: 1em; }
