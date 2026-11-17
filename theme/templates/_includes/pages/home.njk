@@ -3,8 +3,8 @@
   <h1 id="home-title">{% if view.site.headlineHtml %}{{ view.site.headlineHtml | safe }}{% elif view.site.headline %}{{ view.site.headline }}{% else %}{{ view.t.midnightHeadline | safe }}{% endif %}</h1>
   <div class="intro-bottom">
     <div class="intro-description">{% if view.site.introHtml %}{{ view.site.introHtml | safe }}{% else %}<p>{{ view.site.intro or view.t.intro }}</p>{% endif %}</div>
-    {% if view.socialLinks | length %}<nav class="home-social-links" aria-label="{{ view.t.socialProfiles }}">
-      {% for link in view.socialLinks %}<a class="social-link" href="{{ link.href }}">{% include 'partials/social-icon.njk' %}{{ link.label }} <span aria-hidden="true">↗</span></a>{% endfor %}
+    {% if view.socialLinks | length %}<nav class="intro-profile-links" aria-label="{{ view.t.socialProfiles }}">
+      {% for link in view.socialLinks %}<a class="profile-link" href="{{ link.href }}">{% include 'partials/link-icon.njk' %}<span class="profile-label">{{ link.label }}</span><span class="link-arrow" aria-hidden="true">↗</span></a>{% endfor %}
     </nav>{% endif %}
   </div>
 </section>

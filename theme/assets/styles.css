@@ -56,12 +56,13 @@ main { padding: 0 var(--gutter); max-width: calc(var(--page-width) + 2 * var(--g
 .intro-description { max-width: 640px; }
 .intro-description p + p { margin-top: .65em; }
 .intro-description a { text-decoration: underline; text-underline-offset: 3px; }
-.home-social-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 26px; min-width: 0; }
-.social-link { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-.home-social-links a { min-height: 44px; padding: 8px 0; font-size: 13px; }
-.social-link:hover { text-decoration: underline; text-underline-offset: 4px; }
-.brand-icon { width: 17px; height: 17px; flex: none; fill: currentColor; }
-.brand-icon--rednote { width: 30px; height: 30px; }
+/* These are ordinary profile links, not embedded social widgets. */
+.intro-profile-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 26px; min-width: 0; }
+.profile-link { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.intro-profile-links a { min-height: 44px; padding: 8px 0; font-size: 13px; }
+.intro-profile-links a:hover .profile-label { text-decoration: underline; text-underline-offset: 4px; }
+.link-icon { width: 17px; height: 17px; flex: none; fill: currentColor; }
+.link-icon--rednote { width: 30px; height: 30px; }
 .text-link { display: inline-flex; align-items: center; gap: 28px; padding: 8px 0; font-size: 13px; }
 .text-link span { font-size: 18px; }
 .text-link:hover span { transform: translateY(3px); }
@@ -100,8 +101,9 @@ main { padding: 0 var(--gutter); max-width: calc(var(--page-width) + 2 * var(--g
 .footer-name { font-weight: 500; }
 .footer-controls { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 16px 24px; }
 .footer-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 21px; }
-.footer-links a { white-space: nowrap; }
-.footer-links a span { margin-left: 4px; }
+.footer-links a { white-space: nowrap; color: var(--muted); }
+.footer-links a:hover { color: var(--foreground); text-decoration: none; }
+.footer-links .link-arrow { margin-left: 4px; }
 .footer-language { margin-left: 0; flex-shrink: 0; }
 .footer-language a { display: inline-flex; align-items: center; justify-content: center; }
 .loading-state, .empty-state { min-height: 60vh; padding: 110px 0; display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }

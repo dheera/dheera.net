@@ -54,7 +54,7 @@ Normal builds omit the design-preview toolbar and use `defaultStyle` from `site.
 
 `site.md` owns the name, contact/profile links, homepage headline and introduction, and `defaultStyle` (`midnight`, `editorial`, or `museum`). `about.md` owns its title, Markdown body and optional source-relative `portrait` and `travelMap`. Only the NAS library supplies site content; the repository contains no sample galleries or starter copy.
 
-Optional `instagram` and `rednote` URL fields in `site.md` add monochrome profile links below the homepage introduction and in the footer. Remove a field to hide that link. Labels live in `theme/locales/`; the locally bundled icons live in `theme/templates/_includes/partials/social-icon.njk`.
+Optional `instagram` and `rednote` URL fields in `site.md` add monochrome profile links below the homepage introduction and in the footer. Remove a field to hide that link. Labels live in `theme/locales/`; the locally bundled icons live in `theme/templates/_includes/partials/link-icon.njk`.
 
 `travelMap: assets/travel.geojson` adds the inline About map. Its GeoJSON FeatureCollection contains Point and LineString features with `id`, `name`, and `kind` properties. Edit this local data and publish; it is a saved snapshot, not a live Google embed. The original imported KML is retained as `assets/travel-source.kml`. Natural Earth land geometry is bundled locally; projection happens at build time and the browser enhances the static SVG with pan/zoom and place selection. Remove `travelMap` to omit the map.
 
