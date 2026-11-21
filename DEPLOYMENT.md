@@ -1,6 +1,6 @@
 # Production: static Nginx on EC2
 
-Production uses the existing Elastic IP and registrar/DNS configuration. A replacement instance is ready at `44.250.137.235`; the old server remains live until the owner moves the Elastic IP. Nginx serves complete static releases; no Node process, PM2, Forever, application database, or build tooling is needed on the server. Optional regional visibility uses a local MaxMind GeoLite2 database file.
+Production now runs on the Ubuntu 26.04.1 LTS ARM64 replacement instance through the existing Elastic IP, `34.212.118.230`. The owner completed the Elastic IP reassociation; registrar and DNS configuration remain unchanged. `44.250.137.235` was the replacement's temporary staging address and is no longer the deployment target. Nginx serves complete static releases; no Node process, PM2, Forever, application database, or build tooling is needed on the server. Optional regional visibility uses a local MaxMind GeoLite2 database file. The cutover did not stop or terminate the old instance.
 
 ## Publish
 
@@ -32,9 +32,9 @@ On an existing server, back up the Nginx configuration and application superviso
 
 Real downloads are kept in `public/files/` and included in every static release. The vhost preserves the résumé/profile-code redirects to these same-site files and legacy aliases for the galleries migrated to this site. Old posts and galleries not included in the new library return 404. It does not use an SPA fallback. Do not put private source or credentials under the document root.
 
-## Replacement instance preparation
+## Replacement instance preparation and cutover
 
-The new instance at `44.250.137.235` runs Ubuntu 26.04.1 LTS on ARM64, with the distribution's Nginx 1.28.3 package. Its role is limited to serving the static release and maintaining the local GeoIP database. Install the distribution packages for Nginx, `libnginx-mod-http-geoip2`, `geoipupdate`, rsync, Python 3, and automatic security updates. Do not migrate the old application checkout, process managers, build tools, or the old server's complete Nginx module configuration. The vhost uses separate `listen ... ssl;` and `http2 on;` directives supported by the new Nginx version; it is not intended to replace the older server's running vhost before cutover.
+The production instance was prepared at the temporary address `44.250.137.235` before taking over the Elastic IP `34.212.118.230`. It runs Ubuntu 26.04.1 LTS on ARM64, with the distribution's Nginx 1.28.3 package. Its role is limited to serving the static release and maintaining the local GeoIP database. The following setup instructions also serve as a reference for a future replacement. Install the distribution packages for Nginx, `libnginx-mod-http-geoip2`, `geoipupdate`, rsync, Python 3, and automatic security updates. Do not migrate the old application checkout, process managers, build tools, or the old server's complete Nginx module configuration. The vhost uses separate `listen ... ssl;` and `http2 on;` directives supported by the new Nginx version; it is not intended for the older server's Nginx version.
 
 Transfer the existing certificate chain, matching private key, root-only GeoIP updater configuration, and GeoLite2 database securely over SSH. Install the TLS key at the private path above and `/etc/GeoIP.conf` with root ownership and mode `0600`; the database at `/var/lib/GeoIP/GeoLite2-City.mmdb` must be readable by Nginx. Check the certificate's names, expiry, trust chain and matching key before enabling HTTPS. No certificate, private key, MaxMind license, or private SSH key belongs in Git or a public release.
 
@@ -51,9 +51,9 @@ sudo unattended-upgrade --dry-run --debug
 
 Automatic updates use the distribution's security origins in `50unattended-upgrades`. Automatic reboots are disabled; check `/var/run/reboot-required` during maintenance and schedule a reboot when needed. No reboot was required during this preparation. Nginx and the update timers are enabled at boot. See [Ubuntu's automatic-update documentation](https://documentation.ubuntu.com/server/how-to/software/automatic-updates/).
 
-### Deploy before the Elastic IP moves
+### Deploy before the Elastic IP moves (reference)
 
-Leave `deployment/ec2.json` unchanged: normal `npm run deploy` still targets `ubuntu@dheera.net`, which reaches the old production instance until cutover and the replacement afterward. Build with the production origin and call the exported deployment function with the temporary IP to prepare the replacement. This keeps canonical URLs unchanged and records the staging deployment separately:
+Normal `npm run deploy` targets `ubuntu@dheera.net` and now reaches the replacement through the reassociated Elastic IP. No deployment configuration change was needed. The following temporary-IP workflow records how the replacement was prepared before cutover; do not use the historical `44.250.137.235` address for routine publication. For a future replacement, substitute its verified staging address while leaving `deployment/ec2.json` unchanged. Build with the production origin and call the exported deployment function with that temporary IP. This keeps canonical URLs unchanged and records the staging deployment separately:
 
 ```sh
 npm run publish -- --site-url https://dheera.net
@@ -86,9 +86,9 @@ JS
 
 The exported uploader performs the same public-file inventory, remote checksums, deployment lock, and atomic activation as production. Run this build/upload sequence without another concurrent publish. The ignored staging receipt must not overwrite `.published/deployments/production/current.json`. For the initial preparation, the existing local release was checked against the production receipt and uploaded unchanged, so the new server contains exactly the currently published site.
 
-### Verify and cut over
+### Verify before and after cutover
 
-Use the real hostname with an explicit destination IP, so HTTPS checks both the certificate and the intended virtual host without changing DNS. Do not add `-k`:
+Before moving an Elastic IP, use the real hostname with the replacement's explicit destination IP, so HTTPS checks both the certificate and the intended virtual host without changing DNS. The following commands retain the historical staging address from this migration; substitute the address of a future replacement before using them. Do not add `-k`:
 
 ```sh
 curl --resolve dheera.net:80:44.250.137.235 -sSI http://dheera.net/
@@ -103,15 +103,15 @@ curl --resolve dheera.net:443:44.250.137.235 -sSI https://dheera.net/this-page-d
 
 Expect HTTP and `www` redirects to the canonical HTTPS domain, successful English/Chinese pages and media, the résumé download redirect, and a real 404 for the missing page. Verify the deployed content against the local release, not just response status. `/visibility.css` must send one `Cache-Control: private, no-store` header, and remain a 200 response when a conditional request is sent. Check `sudo nginx -t`, active/enabled Nginx, the GeoIP timer, the latest updater result, package-update status, and service recovery after any required reboot. Confirm the instance security group permits HTTP and HTTPS and that DNS has no overlooked AAAA record still directing visitors elsewhere.
 
-The owner performs the Elastic IP reassociation only after readiness is confirmed. Leave the old server intact for rollback. After the move, repeat the public hostname checks without `--resolve`; normal deployment then follows `dheera.net` to the replacement. The temporary `44.250.137.235` address may stop being usable after reassociation.
+The owner has completed the Elastic IP reassociation. Both `dheera.net` and `www.dheera.net` still resolve to `34.212.118.230`, and that IP now reaches the replacement. Public checks confirmed a trusted HTTPS 200 response, the `www` canonical redirect, and all 19 route/content/cache checks. Routine verification and publication now use the public hostname without `--resolve`, for example `curl -sSI https://dheera.net/`. The post-cutover results are recorded below. The old instance was left intact for rollback; no stop or termination was performed. Do not rely on the replacement's historical staging address, `44.250.137.235`, after reassociation.
 
-SSH host keys identify the server, not the Elastic IP. Record the replacement server's public SSH host-key fingerprint through the established connection before cutover. A later connection to `dheera.net` may correctly report that its saved host key changed. Compare the presented key with the recorded replacement fingerprint before updating only that hostname/IP's stale `known_hosts` entries. Preserve strict host-key verification; do not use `StrictHostKeyChecking=no` or discard unrelated entries.
+SSH host keys identify the server, not the Elastic IP. The keys presented by `dheera.net` and `34.212.118.230` after cutover both matched the replacement's recorded ED25519 fingerprint: `SHA256:ek3psc7oxX2w9cRGHXbb3CpPuD+58Rqj1GAMxCLP7ag`. Only those two stale entries in the local `~/.ssh/known_hosts` were updated after verification, with a private backup retained. Authenticated SSH through `ubuntu@dheera.net` then succeeded. Other clients with a saved key for the old server may correctly report a changed-key warning; compare the presented key with the recorded fingerprint before updating their affected entries. Preserve strict host-key verification; do not use `StrictHostKeyChecking=no` or discard unrelated entries.
 
-Readiness record — verified before the Elastic IP cutover on November 20, 2026 (Pacific time):
+Preparation and cutover record — November 20, 2026 (Pacific time). Preparation checks below were completed before cutover; the final two rows distinguish post-cutover verification:
 
 | Item | Result |
 | --- | --- |
-| Replacement address / OS | `44.250.137.235` / Ubuntu 26.04.1 LTS ARM64 |
+| Production address / OS | Elastic IP `34.212.118.230` / Ubuntu 26.04.1 LTS ARM64; historical staging address `44.250.137.235` |
 | Nginx package | `1.28.3-2ubuntu1.14`; active and enabled; configuration test clean |
 | Verified static release | `20261121T073204979Z-332a5757ee50`; all 893 public files verified; identical content to production |
 | TLS expiry | December 15, 2026, 23:59:59 UTC; covers `dheera.net` and `*.dheera.net`; matching key and public trust verified |
@@ -121,8 +121,10 @@ Readiness record — verified before the Elastic IP cutover on November 20, 2026
 | Daily automatic security updates / automatic reboot policy | Both APT timers active/enabled; unattended-upgrade dry run passed; automatic reboots disabled |
 | GeoIP update and single timer | Custom daily timer active/enabled; update succeeded; packaged duplicate timer disabled |
 | External HTTPS, routes and content verification | HTTP/2 and certificate trust passed; 19 content/route/cache checks passed; private key and GeoIP config root-owned `0600` |
-| Public DNS before cutover | `dheera.net` and `www.dheera.net` resolve to `34.212.118.230`; no AAAA addresses returned |
-| Elastic IP cutover | Not performed; owner will reassociate it |
+| Public DNS | `dheera.net` and `www.dheera.net` resolve to `34.212.118.230` before and after cutover; no AAAA addresses returned during preparation |
+| Elastic IP cutover | Completed by the owner; HTTPS 200, trusted certificate, `www` redirect and replacement SSH fingerprint confirmed through the public hostname |
+| Post-cutover route/content/cache checks | All 19 checks passed through the public domain without `--resolve` |
+| Post-cutover SSH known-hosts and services | Only verified `dheera.net` and `34.212.118.230` host-key entries updated; private backup retained. Authenticated SSH confirmed Ubuntu 26.04.1, active/enabled Nginx, active APT/GeoIP timers, release `20261121T073204979Z-332a5757ee50`, writable deployment directories, and a clean `nginx -t` |
 
 The new instance has only SSH and Nginx listening on public TCP ports (22, 80 and 443). Node, npm, PM2, Forever and Docker are not installed. Migration staging files were removed; private credentials were transferred directly over SSH without entering the local checkout. Local verification results and the staging deployment receipt are under ignored `.published/deployments/new-instance/`.
 
@@ -234,6 +236,6 @@ The old application was supervised by `pm2-ubuntu.service`, not Forever. The sta
 
 Private server rollback files are in `/home/ubuntu/site-cutover-backup/20261116-xENseE/`: the original Nginx configuration, PM2 process dump/service and a complete legacy application archive. The stopped server checkout is also retained as `legacy-checkout/` in that backup directory. The previous local checkout was preserved outside this repository at `/home/dheera/code/web/dheera.net-legacy-20261116T044327Z`. These backups are not in Git or the web root.
 
-At this initial cutover, the server was Ubuntu 20.04.6 with Ubuntu Pro unattached. Standard support ended in May 2025, so a fresh Ubuntu 26.04 LTS replacement was recommended separately from the application cutover. No OS release upgrade or reboot was performed during that cutover. This historical server remains live until the owner reassigns its Elastic IP to the replacement described above. See [Ubuntu support dates](https://ubuntu.com/about/release-cycle).
+At this initial cutover, the server was Ubuntu 20.04.6 with Ubuntu Pro unattached. Standard support ended in May 2025, so a fresh Ubuntu 26.04 LTS replacement was recommended separately from the application cutover. No OS release upgrade or reboot was performed during that application cutover. The later Elastic IP reassociation described above moved public traffic to the replacement; it did not stop or terminate this historical instance. See [Ubuntu support dates](https://ubuntu.com/about/release-cycle).
 
 The existing wildcard TLS certificate was retained and expires on December 15, 2026. Renew it or configure automatic certificate renewal before then. Certificate and key material remain on the server and in the owner's private directory, never in this repository.
